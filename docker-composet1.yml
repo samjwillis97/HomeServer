@@ -718,6 +718,7 @@ services:
     hostname: codeserver
     networks:
       - traefik_proxy
+      - default
     environment:
       PUID: $PUID
       PGID: $PGID
