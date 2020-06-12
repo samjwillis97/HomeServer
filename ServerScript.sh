@@ -1,6 +1,4 @@
 #!/bin/dash
-echo "This is a shell script"
-ls -lah
-echo "I am done running ls"
-SOMEVAR='text stuff'
-echo $SOMEVAR
+echo "git pull"
+git pull
+echo
