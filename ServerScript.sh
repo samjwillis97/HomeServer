@@ -1,10 +1,10 @@
-#!/bin/dash
+#!/bin/bash
 echo "Moving to github directory"
 pushd /home/sam/github/HomeServer
 echo "Git pull"
 git pull
 echo "Updating Script"
-pushd -1
+pushd +1
 cp /home/sam/github/Homeserver/ServerScript.sh ServerScript.sh
 echo "Moving to docker-compose directory"
 pushd /home/sam/docker/
