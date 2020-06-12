@@ -5,7 +5,7 @@ echo "Git pull"
 git pull
 echo "Updating Script"
 pushd +1
-cp /home/sam/github/Homeserver/ServerScript.sh ServerScript.sh
+cp /home/sam/github/Homeserver/ServerScript.sh /home/sam/ServerScript.sh
 echo "Moving to docker-compose directory"
 pushd /home/sam/docker/
 echo "Backing up previous compose file"
