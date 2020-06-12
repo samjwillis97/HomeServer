@@ -1,6 +1,9 @@
 #!/bin/bash
 # Ideally add a loop to  environment variables required are within the environment file
-#
+
+# VARIABLES
+
+# CONSTANTS
 RED='\033[0;31m'
 CYAN='\033[1;36m'
 NC='\033[0m' # No Color
@@ -14,6 +17,9 @@ pushd +1
 cp /home/sam/github/HomeServer/ServerScript.sh /home/sam/ServerScript.sh
 echo -e "${CYAN}Moving to docker-compose directory${NC}"
 pushd /home/sam/docker/
+
+# ADD ENVIRONMENT CHECKS HERE
+
 echo -e "${CYAN}Backing up previous compose file${NC}"
 cp /home/sam/docker/docker-compose.yml /home/sam/docker/docker-compose.bak
 echo -e "${CYAN}Importing compose from repository${NC}"
