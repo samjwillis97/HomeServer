@@ -49,6 +49,8 @@ services:
     container_name: traefik
     hostname: traefik
     restart: unless-stopped
+    env_file:
+      - ./.env
     networks:
       - default
       - traefik_proxy
@@ -98,6 +100,8 @@ services:
     container_name: oauth
     hostname: oauth
     restart: always
+    env_file:
+      - ./.env
     networks:
       - default
       - traefik_proxy
@@ -139,6 +143,8 @@ services:
     container_name: portainer
     hostname: portainer
     restart: unless-stopped
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
     ports:
@@ -177,6 +183,8 @@ services:
     container_name: organizr
     hostname: organizr
     restart: unless-stopped
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
     environment:
@@ -215,6 +223,8 @@ services:
     container_name: homer
     hostname: homer
     restart: unless-stopped
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
     environment:
@@ -255,6 +265,8 @@ services:
     container_name: autoindex
     hostname: autoindex
     restart: unless-stopped
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
     ports:
@@ -292,6 +304,8 @@ services:
   deluge:
     image: linuxserver/deluge
     container_name: deluge
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
     ports:
@@ -334,6 +348,8 @@ services:
     container_name: "sabnzbd"
     hostname: sabnzbd
     restart: unless-stopped
+    env_file:
+      - ./.env
     volumes:
       - ${USERDIR}/docker/sabnzbd:/config
       - ${DOWNLOAD_DIR}:/downloads
@@ -378,6 +394,8 @@ services:
     container_name: hydra
     hostname: hydra
     restart: unless-stopped
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
     ports:
@@ -417,6 +435,8 @@ services:
     image: linuxserver/jackett
     container_name: jackett
     restart: always
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
     dns: 1.1.1.1
@@ -461,6 +481,8 @@ services:
     container_name: lidarr
     hostname: lidarr
     restart: unless-stopped
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
     ports:
@@ -503,6 +525,8 @@ services:
     container_name: radarr
     hostname: radarr
     restart: unless-stopped
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
     ports:
@@ -545,6 +569,8 @@ services:
     container_name: sonarr
     hostname: sonarr
     restart: unless-stopped
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
     ports:
@@ -589,6 +615,8 @@ services:
     container_name: ombi
     hostname: ombi
     restart: unless-stopped
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
     ports:
@@ -625,6 +653,8 @@ services:
     container_name: tautulli
     hostname: tautulli
     restart: unless-stopped
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
     ports:
@@ -666,6 +696,8 @@ services:
       CRON_SCHEDULE: '*/5 * * * *'
       SECTION_MAPS:
     restart: unless-stopped
+    env_file:
+      - ./.env
 
 ############################# MEDIA FILE MANAGEMENT
 
@@ -758,6 +790,8 @@ services:
     image: liyasthomas/postwoman:latest
     container_name: postwoman
     hostname: postwoman
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
       - default
@@ -796,6 +830,8 @@ services:
     image: linuxserver/freshrss
     container_name: freshrss
     hostname: freshrss
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
     environment:
@@ -831,6 +867,8 @@ services:
     image: sismics/docs:v1.8
     container_name: teedy
     hostname: teedy
+    env_file:
+      - ./.env
     networks:
       - traefik_proxy
     environment:
@@ -882,6 +920,8 @@ services:
     hostname: glances
     container_name: glances
     restart: unless-stopped
+    env_file:
+      - ./.env
     privileged: true
 #    network_mode: host
     networks:
@@ -925,6 +965,8 @@ services:
     hostname: grafana
     container_name: grafana
     restart: unless-stopped
+    env_file:
+      - ./.env
     user: "1000"
     networks:
       - traefik_proxy
@@ -965,6 +1007,8 @@ services:
     container_name: ouroboros
     hostname: ouroboros
     restart: unless-stopped
+    env_file:
+      - ./.env
     networks:
       - default
     volumes:
