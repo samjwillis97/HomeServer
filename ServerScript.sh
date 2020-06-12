@@ -6,7 +6,8 @@ CYAN='\033[1;36m'
 NC='\033[0m' # No Color
 
 function checkError {
-if [ $? -eq 0 ]; then
+if [ $? -eq 0 ]
+then
 else
     echo -e "${RED}ERROR${NC}"
     echo ERROR
