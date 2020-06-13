@@ -764,7 +764,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - GITURL=https://github.com/samjwillis97/HomeServer.git
+#      - GITURL=https://github.com/samjwillis97/HomeServer.git
     ports:
       - 8567:8000
     restart: unless-stopped
