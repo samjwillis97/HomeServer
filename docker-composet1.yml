@@ -793,7 +793,7 @@ services:
   #     traefik.frontend.auth.forward.trustForwardHeader: "true"
 
   ide:
-    image: linuxserver/cloud9
+    image: linuxserver/cloud9:python
     container_name: ide
     hostname: ide
     networks:
