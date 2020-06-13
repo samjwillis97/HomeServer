@@ -669,6 +669,45 @@ services:
 
 ############################# MEDIA FILE MANAGEMENT
 
+  mkvtoolnix:
+    image: jlesage/mkvtoolnix
+    container_name: mkvtoolnix
+    hostname: mkvtoolnix
+    restart: unless-stopped
+    networks:
+      - traefik_proxy
+    ports:
+      - ${MKVTOOLNIX_PORT}:5800
+    volumes:
+      - ${MEDIA_DIR}:/storage:rw
+      - ${USERDIR}/docker/mkvtoolnix:/config:rw
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    labels:
+      traefik.enable: "true"
+      traefik.backend: mkvtoolnix
+      traefik.protocol: http
+      traefik.port: 5800
+      traefik.frontend.rule: Host:mkvtoolnix.${DOMAINNAME}
+      traefik.frontend.headers.SSLHost: mkvtoolnix.${DOMAINNAME}
+      traefik.docker.network: traefik_proxy
+      traefik.frontend.passHostHeader: "true"
+      traefik.frontend.headers.SSLForceHost: "true"
+      traefik.frontend.headers.SSLRedirect: "true"
+      traefik.frontend.headers.browserXSSFilter: "true"
+      traefik.frontend.headers.contentTypeNosniff: "true"
+      traefik.frontend.headers.forceSTSHeader: "true"
+      traefik.frontend.headers.STSSeconds: 315360000
+      traefik.frontend.headers.STSIncludeSubdomains: "true"
+      traefik.frontend.headers.STSPreload: "true"
+      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
+      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
+
+    
+
+
 #  tdarr:
 #    image: haveagitgat/tdarr
 #    container_name: tdarr
