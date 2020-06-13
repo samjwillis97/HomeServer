@@ -21,7 +21,6 @@
 # docker create network traefik_proxy
 # FORWARD PORTS 8 and 443 to Server
 # docker-compose -f ~/docker/docker-compose.yml up -d
-# this is a test comment
 
 version: "3.7"
 
