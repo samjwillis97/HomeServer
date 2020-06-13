@@ -18,7 +18,7 @@ cp /home/sam/github/HomeServer/ServerScript.sh /home/sam/ServerScript.sh
 echo -e "${CYAN}Moving to docker-compose directory${NC}"
 pushd /home/sam/docker/
 
-# ADD ENVIRONMENT CHECKS HERE
+# ADD ENVIRONMENT CHECKS HERE \$\{.+?\}
 
 echo -e "${CYAN}Backing up previous compose file${NC}"
 cp /home/sam/docker/docker-compose.yml /home/sam/docker/docker-compose.bak
