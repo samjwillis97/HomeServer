@@ -903,44 +903,44 @@ services:
       traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
       traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
 
-  teedy:
-    image: sismics/docs:v1.8
-    container_name: teedy
-    hostname: teedy
-    networks:
-      - traefik_proxy
-    environment:
-      PUID: $PUID
-      PGID: $PGID
-      TZ: $TZ
-      DOCS_BASE_URL: https://docs.${DOMAINNAME}
-    volumes:
-      - $USERDIR/NAS/documents:/data
-    ports:
-      - $TEEDY_PORT:8080
-    restart: unless-stopped
-    labels:
-      traefik.enable: "true"
-      traefik.backend: teedy 
-      traefik.protocol: http
-      traefik.port: 8080 
-      traefik.frontend.rule: Host:docs.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: docs.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
+  # teedy:
+  #   image: sismics/docs:v1.8
+  #   container_name: teedy
+  #   hostname: teedy
+  #   networks:
+  #     - traefik_proxy
+  #   environment:
+  #     PUID: $PUID
+  #     PGID: $PGID
+  #     TZ: $TZ
+  #     DOCS_BASE_URL: https://docs.${DOMAINNAME}
+  #   volumes:
+  #     - $USERDIR/NAS/documents:/data
+  #   ports:
+  #     - $TEEDY_PORT:8080
+  #   restart: unless-stopped
+  #   labels:
+  #     traefik.enable: "true"
+  #     traefik.backend: teedy 
+  #     traefik.protocol: http
+  #     traefik.port: 8080 
+  #     traefik.frontend.rule: Host:docs.${DOMAINNAME}
+  #     traefik.frontend.headers.SSLHost: docs.${DOMAINNAME}
+  #     traefik.docker.network: traefik_proxy
+  #     traefik.frontend.passHostHeader: "true"
+  #     traefik.frontend.headers.SSLForceHost: "true"
+  #     traefik.frontend.headers.SSLRedirect: "true"
+  #     traefik.frontend.headers.browserXSSFilter: "true"
+  #     traefik.frontend.headers.contentTypeNosniff: "true"
+  #     traefik.frontend.headers.forceSTSHeader: "true"
+  #     traefik.frontend.headers.STSSeconds: 315360000
+  #     traefik.frontend.headers.STSIncludeSubdomains: "true"
+  #     traefik.frontend.headers.STSPreload: "true"
+  #     traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
+  #     traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
+  #     traefik.frontend.auth.forward.address: "http://oauth:4181"
+  #     traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
+  #     traefik.frontend.auth.forward.trustForwardHeader: "true"
 
 
 # Guacamole - Remote desktop, SSH, on Telnet on any HTML5 Browser 
