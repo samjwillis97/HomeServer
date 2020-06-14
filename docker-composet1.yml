@@ -813,7 +813,7 @@ services:
       traefik.enable: "true"
       traefik.backend: ide 
       traefik.protocol: http
-      traefik.port: 8000
+      traefik.port: 3000
       traefik.frontend.rule: Host:ide.${DOMAINNAME}
       traefik.frontend.headers.SSLHost: ide.${DOMAINNAME}
       traefik.docker.network: traefik_proxy
