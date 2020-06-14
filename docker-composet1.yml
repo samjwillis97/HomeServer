@@ -793,7 +793,7 @@ services:
   #     traefik.frontend.auth.forward.trustForwardHeader: "true"
 
   ide:
-    image: linuxserver/cloud9:python
+    image: theiaide/theia-full
     container_name: ide
     hostname: ide
     networks:
@@ -803,9 +803,11 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-#      - GITURL=https://github.com/samjwillis97/HomeServer.git
+# not sure about volumes being correct
+    volumes:
+      - ${USERDIR}/docker/theia/project:/home/project:cached
     ports:
-      - 8567:8000
+      - 3008:3000
     restart: unless-stopped
     labels:
       traefik.enable: "true"
