@@ -751,86 +751,46 @@ services:
 
 ############################# UTILITIES
 
-  # codeserver:
-  #   image: linuxserver/code-server
-  #   container_name: codeserver
-  #   hostname: codeserver
-  #   networks:
-  #     - traefik_proxy
-  #     - default
-  #   environment:
-  #     PUID: $PUID
-  #     PGID: $PGID
-  #     TZ: $TZ
-  #     PASSWORD: Willis123
-  #   ports:
-  #     - 8443:8443
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ${USERDIR}/docker/codeserver/projects/:/projects
-  #     - ${USERDIR}/docker/codeserver/config:/config
-  #   labels:
-  #     traefik.enable: "true"
-  #     traefik.backend: codeserver
-  #     traefik.protocol: http
-  #     traefik.port: 8443
-  #     traefik.frontend.rule: Host:ide.${DOMAINNAME}
-  #     traefik.frontend.headers.SSLHost: ide.${DOMAINNAME}
-  #     traefik.docker.network: traefik_proxy
-  #     traefik.frontend.passHostHeader: "true"
-  #     traefik.frontend.headers.SSLForceHost: "true"
-  #     traefik.frontend.headers.SSLRedirect: "true"
-  #     traefik.frontend.headers.browserXSSFilter: "true"
-  #     traefik.frontend.headers.contentTypeNosniff: "true"
-  #     traefik.frontend.headers.forceSTSHeader: "true"
-  #     traefik.frontend.headers.STSSeconds: 315360000
-  #     traefik.frontend.headers.STSIncludeSubdomains: "true"
-  #     traefik.frontend.headers.STSPreload: "true"
-  #     traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-  #     traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-  #     traefik.frontend.auth.forward.address: "http://oauth:4181"
-  #     traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-  #     traefik.frontend.auth.forward.trustForwardHeader: "true"
-
-  ide:
-    image: theiaide/theia-full
-    container_name: ide
-    hostname: ide
-    networks:
-      - traefik_proxy
-      - default
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-# not sure about volumes being correct
-    volumes:
-      - ${USERDIR}/docker/theia/project:/home/project:cached
-    ports:
-      - 3008:3000
-    restart: unless-stopped
-    labels:
-      traefik.enable: "true"
-      traefik.backend: ide 
-      traefik.protocol: http
-      traefik.port: 3000
-      traefik.frontend.rule: Host:ide.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: ide.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
+# not enough space currently, new hard drive use this
+#   ide:
+#     image: theiaide/theia-full
+#     container_name: ide
+#     hostname: ide
+#     networks:
+#       - traefik_proxy
+#       - default
+#     environment:
+#       - PUID=${PUID}
+#       - PGID=${PGID}
+#       - TZ=${TZ}
+# # not sure about volumes being correct
+#     volumes:
+#       - ${USERDIR}/docker/theia/project:/home/project:cached
+#     ports:
+#       - 3008:3000
+#     restart: unless-stopped
+#     labels:
+#       traefik.enable: "true"
+#       traefik.backend: ide 
+#       traefik.protocol: http
+#       traefik.port: 3000
+#       traefik.frontend.rule: Host:ide.${DOMAINNAME}
+#       traefik.frontend.headers.SSLHost: ide.${DOMAINNAME}
+#       traefik.docker.network: traefik_proxy
+#       traefik.frontend.passHostHeader: "true"
+#       traefik.frontend.headers.SSLForceHost: "true"
+#       traefik.frontend.headers.SSLRedirect: "true"
+#       traefik.frontend.headers.browserXSSFilter: "true"
+#       traefik.frontend.headers.contentTypeNosniff: "true"
+#       traefik.frontend.headers.forceSTSHeader: "true"
+#       traefik.frontend.headers.STSSeconds: 315360000
+#       traefik.frontend.headers.STSIncludeSubdomains: "true"
+#       traefik.frontend.headers.STSPreload: "true"
+#       traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
+#       traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
+#       traefik.frontend.auth.forward.address: "http://oauth:4181"
+#       traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
+#       traefik.frontend.auth.forward.trustForwardHeader: "true"
       
   # hopefully replaced by theia full ide
   # postwoman:
