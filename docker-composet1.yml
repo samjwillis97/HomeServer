@@ -657,15 +657,15 @@ services:
       traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
 
 # Plex-Sync - For Syncing watched status between plex servers 
-  plex-sync:
-    image: patsissons/plex-sync:develop
-    container_name: plex-sync
-    environment:
-      INITIAL_RUN: "true"
-#      DRY_RUN: 0
-      CRON_SCHEDULE: '*/5 * * * *'
-      SECTION_MAPS:
-    restart: unless-stopped
+#   plex-sync:
+#     image: patsissons/plex-sync:develop
+#     container_name: plex-sync
+#     environment:
+#       INITIAL_RUN: "true"
+# #      DRY_RUN: 0
+#       CRON_SCHEDULE: '*/5 * * * *'
+#       SECTION_MAPS:
+#     restart: unless-stopped
 
 ############################# MEDIA FILE MANAGEMENT
 
