@@ -1003,7 +1003,7 @@ services:
     networks:
       - traefik_proxy
     volumes:
-      - ${$USERDIR}/docker/chronograf:/var/lib/chronograf
+      - ${USERDIR}/docker/chronograf:/var/lib/chronograf
     ports:
       - "8888:8888"
     depends_on:
