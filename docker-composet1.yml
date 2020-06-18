@@ -995,6 +995,41 @@ services:
       traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
       traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
 
+  chronograf:
+    image: chronograf:1.8
+    hostname: chronograf
+    container_name: chronograf
+    restart: unless-stopped
+    networks:
+      - traefik_proxy
+    volumes:
+      - ${$USERDIR}/docker/chronograf:/var/lib/chronograf
+    ports:
+      - "8888:8888"
+    depends_on:
+      - influxdb
+    labels:
+      traefik.enable: "true"
+      traefik.backend: chronograf
+      traefik.protocol: http
+      traefik.port: 8888
+      traefik.frontend.rule: Host:chrono.${DOMAINNAME}
+      traefik.frontend.headers.SSLHost: chrono.${DOMAINNAME}
+      traefik.docker.network: traefik_proxy
+      traefik.frontend.passHostHeader: "true"
+      traefik.frontend.headers.SSLForceHost: "true"
+      traefik.frontend.headers.SSLRedirect: "true"
+      traefik.frontend.headers.browserXSSFilter: "true"
+      traefik.frontend.headers.contentTypeNosniff: "true"
+      traefik.frontend.headers.forceSTSHeader: "true"
+      traefik.frontend.headers.STSSeconds: 315360000
+      traefik.frontend.headers.STSIncludeSubdomains: "true"
+      traefik.frontend.headers.STSPreload: "true"
+      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
+      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
+      traefik.frontend.auth.forward.address: "http://oauth:4181"
+      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
+      traefik.frontend.auth.forward.trustForwardHeader: "true"
 
   grafana:
     image: grafana/grafana
