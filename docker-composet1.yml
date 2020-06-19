@@ -31,6 +31,7 @@ networks:
       name: traefik_proxy
   default:
     driver: bridge
+  influxdb:
 
 ########################### SERVICES
 services:
@@ -966,6 +967,7 @@ services:
     restart: unless-stopped
     networks:
       - traefik_proxy
+      - influxdb
     volumes:
       - ${USERDIR}/docker/influxdb/data:/var/lib/influxdb
       - ${USERDIR}/docker/influxdb/config/influxdb.conf:/etc/influxdb/influxdb.conf:ro
@@ -1002,6 +1004,7 @@ services:
     restart: unless-stopped
     networks:
       - traefik_proxy
+      - influxdb
     volumes:
       - ${USERDIR}/docker/chronograf:/var/lib/chronograf
     ports:
@@ -1030,6 +1033,17 @@ services:
       traefik.frontend.auth.forward.address: "http://oauth:4181"
       traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
       traefik.frontend.auth.forward.trustForwardHeader: "true"
+
+  telegraf:
+    image: telegraf:1.14
+    hostname: telegraf
+    container_name: telegraf
+    restart: unless_stopped
+    networks:
+      - traefik_proxy
+      - influxdb
+    volumes:
+      - ${USERDIR}/docker/telegraf/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
 
   grafana:
     image: grafana/grafana
