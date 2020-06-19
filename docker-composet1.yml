@@ -1038,7 +1038,7 @@ services:
     image: telegraf:1.14
     hostname: telegraf
     container_name: telegraf
-    restart: unless_stopped
+    restart: unless-stopped
     networks:
       - traefik_proxy
       - influxdb
