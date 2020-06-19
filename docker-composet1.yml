@@ -1059,6 +1059,21 @@ services:
     ports:
       - "9092:9092"
 
+  varken:
+    image: boerderij/varken
+    hostname: varken
+    container_name: varken
+    restart: unless-stopped
+    networks:
+      - influxdb
+      - traefik_proxy
+    volumes:
+      - ${USERDIR}/docker/varken:/config
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+
   grafana:
     image: grafana/grafana
     hostname: grafana
