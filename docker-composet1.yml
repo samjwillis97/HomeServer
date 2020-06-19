@@ -1044,6 +1044,7 @@ services:
       - influxdb
     volumes:
       - ${USERDIR}/docker/telegraf/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /var/run/docker.sock:/var/run/docker.sock
 
   grafana:
     image: grafana/grafana
