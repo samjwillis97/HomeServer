@@ -1060,7 +1060,7 @@ services:
       - "9092:9092"
 
   varken:
-    image: boerderij/varken
+    image: boerderij/varken:1.7.6
     hostname: varken
     container_name: varken
     restart: unless-stopped
