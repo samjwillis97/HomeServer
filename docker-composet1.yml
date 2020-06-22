@@ -1034,6 +1034,44 @@ services:
       traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
       traefik.frontend.auth.forward.trustForwardHeader: "true"
 
+  mosquitto:
+    image: eclipse-mosquitto
+    hostname: mosquitto
+    container_name: mosquitto
+    restart: unless-stopped
+    networks:
+      - influxdb
+      - traefik_proxy
+    volumes:
+      - ${USERDIR}/docker/mosquitto/data:/mosquitto/data
+      - ${USERDIR}/docker/mosquitto/config:/mosquitto/config
+      - ${USERDIR}/docker/mosquitto/log:/docker/mosquitto/log
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    labels:
+      traefik.enable: "true"
+      traefik.backend: mosquitto
+      traefik.protocol: http
+      traefik.port: 1883
+      traefik.frontend.rule: Host:mqtt.${DOMAINNAME}
+      traefik.frontend.headers.SSLHost: mqtt.${DOMAINNAME}
+      traefik.docker.network: traefik_proxy
+      traefik.frontend.passHostHeader: "true"
+      traefik.frontend.headers.SSLForceHost: "true"
+      traefik.frontend.headers.SSLRedirect: "true"
+      traefik.frontend.headers.browserXSSFilter: "true"
+      traefik.frontend.headers.contentTypeNosniff: "true"
+      traefik.frontend.headers.forceSTSHeader: "true"
+      traefik.frontend.headers.STSSeconds: 315360000
+      traefik.frontend.headers.STSIncludeSubdomains: "true"
+      traefik.frontend.headers.STSPreload: "true"
+      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
+      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
+      traefik.frontend.auth.forward.address: "http://oauth:4181"
+      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
+      traefik.frontend.auth.forward.trustForwardHeader: "true"
+
   telegraf:
     image: telegraf:1.14
     hostname: telegraf
