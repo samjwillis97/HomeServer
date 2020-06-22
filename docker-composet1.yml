@@ -1042,6 +1042,10 @@ services:
     networks:
       - influxdb
       - traefik_proxy
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
       - ${USERDIR}/docker/mosquitto/data:/mosquitto/data
       - ${USERDIR}/docker/mosquitto/config:/mosquitto/config
