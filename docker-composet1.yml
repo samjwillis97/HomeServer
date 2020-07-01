@@ -1114,7 +1114,7 @@ services:
       - TZ=${TZ}
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:6.7.4
     hostname: grafana
     container_name: grafana
     restart: unless-stopped
