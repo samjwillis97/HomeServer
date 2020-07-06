@@ -1047,9 +1047,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${USERDIR}/docker/mosquitto/data:/mosquitto/data
-      - ${USERDIR}/docker/mosquitto/config:/mosquitto/config
-      - ${USERDIR}/docker/mosquitto/log:/docker/mosquitto/log
+      - ${USERDIR}/docker/mosquitto:/mosquitto
     ports:
       - "1883:1883"
       - "9001:9001"
