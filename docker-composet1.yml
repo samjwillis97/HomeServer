@@ -1056,7 +1056,7 @@ services:
       traefik.enable: "true"
       traefik.backend: mosquitto
       traefik.protocol: http
-      traefik.port: 1883
+      traefik.port: 9001
       traefik.frontend.rule: Host:mqtt.${DOMAINNAME}
       traefik.frontend.headers.SSLHost: mqtt.${DOMAINNAME}
       traefik.docker.network: traefik_proxy
