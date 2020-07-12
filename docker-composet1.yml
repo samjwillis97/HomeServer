@@ -508,7 +508,7 @@ services:
     networks:
       - traefik_proxy
     ports:
-      - "${RADARR_PORT}:7878"
+      - "7878:7878"
     volumes:
       - ${USERDIR}/docker/radarr:/config
       - ${DOWNLOAD_DIR}:/downloads
