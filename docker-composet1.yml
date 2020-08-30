@@ -508,7 +508,7 @@ services:
     networks:
       - traefik_proxy
     ports:
-      - "7878:7878"
+      - "6789:6789"
     volumes:
       - ${USERDIR}/docker/radarr:/config
       - ${DOWNLOAD_DIR}:/downloads
@@ -522,7 +522,7 @@ services:
       traefik.enable: "true"
       traefik.backend: radarr
       traefik.protocol: http
-      traefik.port: 7878
+      traefik.port: 6789
       traefik.frontend.rule: Host:radarr.${DOMAINNAME}
       traefik.frontend.headers.SSLHost: radarr.${DOMAINNAME}
       traefik.docker.network: traefik_proxy
