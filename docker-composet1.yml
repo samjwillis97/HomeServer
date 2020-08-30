@@ -330,89 +330,89 @@ services:
       traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
       traefik.frontend.auth.forward.trustForwardHeader: "true"
       
-# SABnzbd - Binary newsgrabber (NZB downloader)
-  sabnzbd:
-    image: "linuxserver/sabnzbd"
-    container_name: "sabnzbd"
-    hostname: sabnzbd
-    restart: unless-stopped
-    volumes:
-      - ${USERDIR}/docker/sabnzbd:/config
-      - ${DOWNLOAD_DIR}:/downloads
-      - ${USERDIR}/docker/shared:/shared
-    ports:
-        - "${SABNZBD_PORT}:8080"
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - UMASK_SET=002
-    networks:
-      - traefik_proxy
-    labels:      
-      traefik.enable: "true"
-      traefik.backend: sabnzbd
-      traefik.protocol: http
-      traefik.port: 8080
-      traefik.frontend.rule: Host:sabnzbd.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: sabnzbd.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
+# # SABnzbd - Binary newsgrabber (NZB downloader)
+#   sabnzbd:
+#     image: "linuxserver/sabnzbd"
+#     container_name: "sabnzbd"
+#     hostname: sabnzbd
+#     restart: unless-stopped
+#     volumes:
+#       - ${USERDIR}/docker/sabnzbd:/config
+#       - ${DOWNLOAD_DIR}:/downloads
+#       - ${USERDIR}/docker/shared:/shared
+#     ports:
+#         - "${SABNZBD_PORT}:8080"
+#     environment:
+#       - PUID=${PUID}
+#       - PGID=${PGID}
+#       - TZ=${TZ}
+#       - UMASK_SET=002
+#     networks:
+#       - traefik_proxy
+#     labels:      
+#       traefik.enable: "true"
+#       traefik.backend: sabnzbd
+#       traefik.protocol: http
+#       traefik.port: 8080
+#       traefik.frontend.rule: Host:sabnzbd.${DOMAINNAME}
+#       traefik.frontend.headers.SSLHost: sabnzbd.${DOMAINNAME}
+#       traefik.docker.network: traefik_proxy
+#       traefik.frontend.passHostHeader: "true"
+#       traefik.frontend.headers.SSLForceHost: "true"
+#       traefik.frontend.headers.SSLRedirect: "true"
+#       traefik.frontend.headers.browserXSSFilter: "true"
+#       traefik.frontend.headers.contentTypeNosniff: "true"
+#       traefik.frontend.headers.forceSTSHeader: "true"
+#       traefik.frontend.headers.STSSeconds: 315360000
+#       traefik.frontend.headers.STSIncludeSubdomains: "true"
+#       traefik.frontend.headers.STSPreload: "true"
+#       traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
+#       traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
+#       traefik.frontend.auth.forward.address: "http://oauth:4181"
+#       traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
+#       traefik.frontend.auth.forward.trustForwardHeader: "true"
 
 ############################# INDEXERS
 
-# NZBHydra2 - NZB meta search
-  hydra:
-    image: linuxserver/hydra2
-    container_name: hydra
-    hostname: hydra
-    restart: unless-stopped
-    networks:
-      - traefik_proxy
-    ports:
-      - "${NZBHYDRA_PORT}:5076"
-    volumes:
-      - ${USERDIR}/docker/hydra2:/config
-      - ${DOWNLOAD_DIR}:/downloads
-    environment:
-      PUID: ${PUID}
-      PGID: ${PGID}
-      TZ: ${TZ}
-    labels:
-      traefik.enable: "true"
-      traefik.backend: hydra
-      traefik.protocol: http
-      traefik.port: 5076
-      traefik.frontend.rule: Host:hydra.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: hydra.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
+# # NZBHydra2 - NZB meta search
+#   hydra:
+#     image: linuxserver/hydra2
+#     container_name: hydra
+#     hostname: hydra
+#     restart: unless-stopped
+#     networks:
+#       - traefik_proxy
+#     ports:
+#       - "${NZBHYDRA_PORT}:5076"
+#     volumes:
+#       - ${USERDIR}/docker/hydra2:/config
+#       - ${DOWNLOAD_DIR}:/downloads
+#     environment:
+#       PUID: ${PUID}
+#       PGID: ${PGID}
+#       TZ: ${TZ}
+#     labels:
+#       traefik.enable: "true"
+#       traefik.backend: hydra
+#       traefik.protocol: http
+#       traefik.port: 5076
+#       traefik.frontend.rule: Host:hydra.${DOMAINNAME}
+#       traefik.frontend.headers.SSLHost: hydra.${DOMAINNAME}
+#       traefik.docker.network: traefik_proxy
+#       traefik.frontend.passHostHeader: "true"
+#       traefik.frontend.headers.SSLForceHost: "true"
+#       traefik.frontend.headers.SSLRedirect: "true"
+#       traefik.frontend.headers.browserXSSFilter: "true"
+#       traefik.frontend.headers.contentTypeNosniff: "true"
+#       traefik.frontend.headers.forceSTSHeader: "true"
+#       traefik.frontend.headers.STSSeconds: 315360000
+#       traefik.frontend.headers.STSIncludeSubdomains: "true"
+#       traefik.frontend.headers.STSPreload: "true"
+#       traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
+#       traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
+#       traefik.frontend.auth.forward.address: "http://oauth:4181"
+#       traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
+#       traefik.frontend.auth.forward.trustForwardHeader: "true"
 
 # Jackett - Torrent Indexer
   jackett:
