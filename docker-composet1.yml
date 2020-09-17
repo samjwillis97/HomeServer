@@ -32,7 +32,6 @@ networks:
       name: traefik_proxy
   default:
     driver: bridge
-  influxdb:
 
 ########################### SERVICES
 services:
@@ -962,6 +961,8 @@ services:
 ############################# TESTING 
   nodered:
     image: nodered/node-red:latest
+    hostname: nodered
+    container_name: nodered
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -991,6 +992,9 @@ services:
       traefik.frontend.headers.STSPreload: "true"
       traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
       traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
+      traefik.frontend.auth.forward.address: "http://oauth:4181"
+      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
+      traefik.frontend.auth.forward.trustForwardHeader: "true"
 
   # influxdb:
   #   image: influxdb:1.8
