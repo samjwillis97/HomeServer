@@ -959,42 +959,41 @@ services:
       traefik.frontend.auth.forward.trustForwardHeader: "true"
 
 ############################# TESTING 
-  nodered:
-    image: nodered/node-red:latest
-    hostname: nodered
-    container_name: nodered
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    ports:
-      - "1880:1880"
-    networks:
-      - traefik_proxy
-    volumes:
-      - ${USERDIR}/docker/nodered/data:/data
-    labels:
-      traefik.enable: "true"
-      traefik.backend: nodered
-      traefik.protocol: http
-      traefik.port: 1880
-      traefik.frontend.rule: Host:node.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: node.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
+  # nodered: 
+  #   hostname: nodered
+  #   container_name: nodered
+  #   environment:
+  #     - PUID=${PUID}
+  #     - PGID=${PGID}
+  #     - TZ=${TZ}
+  #   ports:
+  #     - "1880:1880"
+  #   networks:
+  #     - traefik_proxy
+  #   volumes:
+  #     - ${USERDIR}/docker/nodered/data:/data
+  #   labels:
+  #     traefik.enable: "true"
+  #     traefik.backend: nodered
+  #     traefik.protocol: http
+  #     traefik.port: 1880
+  #     traefik.frontend.rule: Host:node.${DOMAINNAME}
+  #     traefik.frontend.headers.SSLHost: node.${DOMAINNAME}
+  #     traefik.docker.network: traefik_proxy
+  #     traefik.frontend.passHostHeader: "true"
+  #     traefik.frontend.headers.SSLForceHost: "true"
+  #     traefik.frontend.headers.SSLRedirect: "true"
+  #     traefik.frontend.headers.browserXSSFilter: "true"
+  #     traefik.frontend.headers.contentTypeNosniff: "true"
+  #     traefik.frontend.headers.forceSTSHeader: "true"
+  #     traefik.frontend.headers.STSSeconds: 315360000
+  #     traefik.frontend.headers.STSIncludeSubdomains: "true"
+  #     traefik.frontend.headers.STSPreload: "true"
+  #     traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
+  #     traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
+  #     traefik.frontend.auth.forward.address: "http://oauth:4181"
+  #     traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
+      # traefik.frontend.auth.forward.trustForwardHeader: "true"
 
   # influxdb:
   #   image: influxdb:1.8
