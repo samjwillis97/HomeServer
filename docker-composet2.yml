@@ -19,7 +19,7 @@
 # nano ~/docker/traefik/traefik.toml
 # nano ~/docker/docker-compose.yml
 # docker network create t2_proxy
-# FORWARD PORTS 8 and 443 to Server
+# FORWARD PORTS 8 and 443 to S erver
 # docker-compose -f ~/docker/docker-compose.yml up -d
 
 
@@ -62,7 +62,7 @@ services:
       - --accessLog.filters.statusCodes=400-499
       - --providers.docker=true
       - --providers.docker.endpoint=unix:///var/run/docker.sock
-      - --providers.docker.defaultrule=Host(`{{ index .Labels "com.docker.compose.service" }}.$DOMAINNAME`)
+      - --providers.docker.defaultrule=Host(`{{ index .Labels "com.docker.compose.service" }}.${DOMAINNAME}`)
       - --providers.docker.exposedByDefault=false
       - --providers.docker.network=t2_proxy
       - --providers.docker.swarmMode=false
@@ -70,7 +70,7 @@ services:
 #      - --providers.file.filename=/path/to/file # Load dynamic configuration from a file.
       - --providers.file.watch=true # Only works on top level files in the rules folder
       - --certificatesResolvers.dns-cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory # LetsEncrypt Staging Server - uncomment when testing
-      - --certificatesResolvers.dns-cloudflare.acme.email=$CLOUDFLARE_EMAIL
+      - --certificatesResolvers.dns-cloudflare.acme.email=${CLOUDFLARE_EMAIL}
       - --certificatesResolvers.dns-cloudflare.acme.storage=/acme.json
       - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.provider=cloudflare
       - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
@@ -98,8 +98,8 @@ services:
       - $USERDIR/docker/traefik2/traefik.log:/traefik.log 
       - $USERDIR/docker/shared:/shared
     environment:
-      - CF_API_EMAIL=$CLOUDFLARE_EMAIL
-      - CF_API_KEY=$CLOUDFLARE_API_KEY
+      - CF_API_EMAIL=${CLOUDFLARE_EMAIL}
+      - CF_API_KEY=${CLOUDFLARE_API_KEY}
     labels:
       - "traefik.enable=true"
       # HTTP-to-HTTPS Redirect
@@ -109,18 +109,17 @@ services:
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
       # HTTP Routers
       - "traefik.http.routers.traefik-rtr.entrypoints=https"
-      - "traefik.http.routers.traefik-rtr.rule=Host(`traefik.$DOMAINNAME`)"
+      - "traefik.http.routers.traefik-rtr.rule=Host(`traefik.${DOMAINNAME}`)"
       - "traefik.http.routers.traefik-rtr.tls=true"
       - "traefik.http.routers.traefik-rtr.tls.certresolver=dns-cloudflare" # Comment out this line after first run of traefik to force the use of wildcard certs
-      - "traefik.http.routers.traefik-rtr.tls.domains[0].main=$DOMAINNAME"
-      - "traefik.http.routers.traefik-rtr.tls.domains[0].sans=*.$DOMAINNAME"
+      - "traefik.http.routers.traefik-rtr.tls.domains[0].main=${DOMAINNAME}"
+      - "traefik.http.routers.traefik-rtr.tls.domains[0].sans=*.${DOMAINNAME}"
 #      - "traefik.http.routers.traefik-rtr.tls.domains[1].main=$SECONDDOMAINNAME" # Pulls main cert for second domain
 #      - "traefik.http.routers.traefik-rtr.tls.domains[1].sans=*.$SECONDDOMAINNAME" # Pulls wildcard cert for second domain
       ## Services - API
       - "traefik.http.routers.traefik-rtr.service=api@internal"
       ## Middlewares
       - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file" 
-
 
 # Google OAuth 2.0 - Forward Authentication
   oauth:
@@ -130,14 +129,14 @@ services:
     networks:
       - t2_proxy
     environment:
-      CLIENT_ID: $GOOGLE_CLIENT_ID
-      CLIENT_SECRET: $GOOGLE_CLIENT_SECRET
-      SECRET: $OAUTH_SECRET
-      COOKIE_DOMAIN: $DOMAINNAME
+      CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      SECRET: ${OAUTH_SECRET}
+      COOKIE_DOMAIN: ${DOMAINNAME}
       INSECURE_COOKIE: false
-      AUTH_HOST: oauth.$DOMAINNAME
+      AUTH_HOST: oauth.${DOMAINNAME}
       URL_PATH: /_oauth
-      WHITELIST: $MY_EMAIL,ozpyes@gmail.com
+      WHITELIST: ${MY_EMAIL},ozpyes@gmail.com
       LOG_LEVEL: info
       LOG_FORMAT: text
       LIFETIME: 2592000 # 30 days
@@ -145,14 +144,13 @@ services:
       traefik.enable: true
       ## HTTP Routers
       traefik.http.routers.oauth-rtr.entrypoints: https
-      traefik.http.routers.oauth-rtr.rule: Host(`oauth.$DOMAINNAME)
+      traefik.http.routers.oauth-rtr.rule: Host(`oauth.${DOMAINNAME})
       traefik.http.routers.oauth-rtr.tls: true
       ## HTTP Services
       traefik.http.routers.oauth-rtr.service: oauth-svc
       traefik.http.services.oauth-svc.loadbalancer.server.port: 4181
       ## Middlewares
       traefik.http.routers.oauth-rtr.middlewares: chain-oauth@file
-
 
 # Portainer - Container Management WebUI
   portainer:
@@ -164,24 +162,24 @@ services:
     security_opt:
       - no-new-privileges:true
     ports:
-      - "$PORTAINER_PORT:9000"
+      - ${PORTAINER_PORT}:${PORTAINER_PORT}
     command: -H unix:///var/run/docker.sock
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - $USERDIR/docker/portainer/data:/data
     environment:
-      TZ: $TZ
+      TZ: ${TZ}
     labels:
       traefik.enable: true
       ## HTTP Routers
       traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`portainer.$DOMAINNAME`)
+      traefik.http.routers.portainer-rtr.rule: Host(`portainer.${DOMAINNAME}`)
       traefik.http.routers.portainer-rtr.tls: true
       ## Middlewares
       traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
       traefik.http.routers.portainer-rtr.service: portainer-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: 9000
+      traefik.http.services.portainer-svc.loadbalancer.server.port: ${PORTAINER_PORT}
 
 # Organizr - Unified Frontend
   organizr:
@@ -193,53 +191,23 @@ services:
     security_opt:
       - no-new-privileges:true
     environment:
-      PUID: $PUID
-      PGID: $PGID
-      TZ: $TZ
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
     volumes:
       - $USERDIR/docker/organizr:/config
     ports:
-      - "$ORGANIZR_PORT:80"
+      - ${ORGANIZR_PORT}:80
     labels:
       traefik.enable: true
       ## HTTP Routers
       traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`www.$DOMAINNAME`)
+      traefik.http.routers.portainer-rtr.rule: Host(`www.${DOMAINNAME}`)
       traefik.http.routers.portainer-rtr.tls: true
       ## Middlewares
       traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
       traefik.http.routers.portainer-rtr.service: organizr-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: 80
-
-
-# Heimdall - Unified Frontend Alternative
-  heimdall:
-    image: linuxserver/heimdall
-    container_name: heimdall
-    restart: unless-stopped
-    networks:
-      - t2_proxy
-    security_opt:
-      - no-new-privileges:true
-    ports:
-     - "${HEIMDALL_PORT}:80"
-    volumes:
-      - ${USERDIR}/docker/heimdall:/config
-    environment:
-      PUID: ${PUID}
-      PGID: ${PGID}
-      TZ: ${TZ}
-    labels:
-      traefik.enable: true
-      ## HTTP Routers
-      traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`links.$DOMAINNAME`)
-      traefik.http.routers.portainer-rtr.tls: true
-      ## Middlewares
-      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
-      ## HTTP Services
-      traefik.http.routers.portainer-rtr.service: heimdall-svc
       traefik.http.services.portainer-svc.loadbalancer.server.port: 80
 
 ## Autoindex - Simple Directory Index
@@ -253,21 +221,20 @@ services:
     security_opt:
       - no-new-privileges:true
     ports:
-      - "${INDEX_PORT}:80"
+      - ${INDEX_PORT}:80
     volumes:
       - ${INDEX_DIR}:/var/lib/nginx/html:ro # Location you want to index
     labels:
       traefik.enable: true
       ## HTTP Routers
       traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`index.$DOMAINNAME`)
+      traefik.http.routers.portainer-rtr.rule: Host(`index.${DOMAINNAME}`)
       traefik.http.routers.portainer-rtr.tls: true
       ## Middlewares
       traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
       traefik.http.routers.portainer-rtr.service: index-svc
       traefik.http.services.portainer-svc.loadbalancer.server.port: 80
-
 
 ############################# DATABASE
 
@@ -277,12 +244,11 @@ services:
     image: linuxserver/mariadb:latest
     restart: always
     networks:
-      - default
       - t2_proxy
     security_opt:
       - no-new-privileges:true
     ports:
-      - "3306:3306"
+      - ${DB_PORT}:${DB_PORT}
     volumes:
       - ${USERDIR}/docker/mariadb/data:/config
       - ${USERDIR}/docker/shared:/shared
@@ -301,37 +267,26 @@ services:
     hostname: phpmyadmin
     restart: unless-stopped
     networks:
-      - traefik_proxy
+      - t2_proxy
       - default
     ports:
-      - "${PHPMYADMIN_PORT}:80"
+      - ${PHPMYADMIN_PORT}:${PHPMYADMIN_PORT}
     environment:
       PMA_HOST: ${DB_HOST}
       PMA_PORT: ${DB_PORT}
       PMA_ARBITRARY: 1 
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     labels:
-      traefik.enable: "true"
-      traefik.backend: phpmyadmin
-      traefik.protocol: http
-      traefik.port: 80
-      traefik.frontend.rule: Host:pma.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: pma.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.portainer-rtr.entrypoints: https
+      traefik.http.routers.portainer-rtr.rule: Host(`pma.${DOMAINNAME}`)
+      traefik.http.routers.portainer-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.portainer-rtr.service: index-svc
+      traefik.http.services.portainer-svc.loadbalancer.server.port: ${PHPMYADMIN_PORT}
 
 ############################# DOWNLOADERS
 
@@ -340,7 +295,7 @@ services:
     image: linuxserver/deluge
     container_name: deluge
     networks:
-      - traefik_proxy
+      - 
     ports:
       - ${DELUGE_PORT}:${DELUGE_PORT}
     environment:
@@ -353,154 +308,18 @@ services:
       - ${DOWNLOAD_DIR}:/downloads
     restart: unless-stopped
     labels:
-      traefik.enable: "true"
-      traefik.backend: deluge
-      traefik.protocol: http
-      traefik.port: ${DELUGE_PORT}
-      traefik.frontend.rule: Host:deluge.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: deluge.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
-
-# Transmission Torrent Downloader
-  # transmission:
-  #   image: linuxserver/transmission
-  #   container_name: transmission
-  #   environment:
-  #     - PUID=${PUID}
-  #     - PGID=${PGID}
-  #     - TZ=${TZ}
-  #     - UMASK_SET=002
-  #     - TRANSMISSION_WEB_HOME=/transmission-web-control/ #optional
-  #   volumes:
-  #     - ${USERDIR}/docker/transmission:/config
-  #     - ${DOWNLOAD_DIR}:/downloads
-  #   ports:
-  #     - ${TRANSMISSION_PORT}:${TRANSMISSION_PORT}
-  #     - 51413:51413
-  #     - 51413:51413/udp
-  #   restart: unless-stopped
-  #   networks:
-  #     - traefik_proxy
-  #   labels:
-  #     traefik.enable: "true"
-  #     traefik.backend: transmission
-  #     traefik.protocol: http
-  #     traefik.port: ${TRANSMISSION_PORT}
-  #     traefik.frontend.rule: Host:transmission.${DOMAINNAME}
-  #     traefik.frontend.headers.SSLHost: transmission.${DOMAINNAME}
-  #     traefik.docker.network: traefik_proxy
-  #     traefik.frontend.passHostHeader: "true"
-  #     traefik.frontend.headers.SSLForceHost: "true"
-  #     traefik.frontend.headers.SSLRedirect: "true"
-  #     traefik.frontend.headers.browserXSSFilter: "true"
-  #     traefik.frontend.headers.contentTypeNosniff: "true"
-  #     traefik.frontend.headers.forceSTSHeader: "true"
-  #     traefik.frontend.headers.STSSeconds: 315360000
-  #     traefik.frontend.headers.STSIncludeSubdomains: "true"
-  #     traefik.frontend.headers.STSPreload: "true"
-  #     traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-  #     traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-  #     traefik.frontend.auth.forward.address: "http://oauth:4181"
-  #     traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-  #     traefik.frontend.auth.forward.trustForwardHeader: "true"
-
-# SABnzbd - Binary newsgrabber (NZB downloader)
-  sabnzbd:
-    image: "linuxserver/sabnzbd"
-    container_name: "sabnzbd"
-    hostname: sabnzbd
-    restart: unless-stopped
-    volumes:
-      - ${USERDIR}/docker/sabnzbd:/config
-      - ${DOWNLOAD_DIR}:/downloads
-      - ${USERDIR}/docker/shared:/shared
-    ports:
-        - "${SABNZBD_PORT}:8080"
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - UMASK_SET=002
-    networks:
-      - traefik_proxy
-    labels:      
-      traefik.enable: "true"
-      traefik.backend: sabnzbd
-      traefik.protocol: http
-      traefik.port: 8080
-      traefik.frontend.rule: Host:sabnzbd.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: sabnzbd.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.portainer-rtr.entrypoints: https
+      traefik.http.routers.portainer-rtr.rule: Host(`deluge.${DOMAINNAME}`)
+      traefik.http.routers.portainer-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.portainer-rtr.service: index-svc
+      traefik.http.services.portainer-svc.loadbalancer.server.port: ${DELUGE_PORT}
 
 ############################# INDEXERS
-
-# NZBHydra2 - NZB meta search
-  hydra:
-    image: linuxserver/hydra2
-    container_name: hydra
-    hostname: hydra
-    restart: unless-stopped
-    networks:
-      - traefik_proxy
-    ports:
-      - "${NZBHYDRA_PORT}:5076"
-    volumes:
-      - ${USERDIR}/docker/hydra2:/config
-      - ${DOWNLOAD_DIR}:/downloads
-    environment:
-      PUID: ${PUID}
-      PGID: ${PGID}
-      TZ: ${TZ}
-    labels:
-      traefik.enable: "true"
-      traefik.backend: hydra
-      traefik.protocol: http
-      traefik.port: 5076
-      traefik.frontend.rule: Host:hydra.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: hydra.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
 
 # Jackett - Torrent Indexer
   jackett:
@@ -508,10 +327,10 @@ services:
     container_name: jackett
     restart: always
     networks:
-      - traefik_proxy
+      - t2_proxy
     dns: 1.1.1.1
     ports:
-      - "${JACKETT_PORT}:9117"
+      - ${JACKETT_PORT}:${JACKETT_PORT}
     volumes:
       - ${USERDIR}/docker/jackett:/config
       - ${DOWNLOAD_DIR}:/downloads
@@ -521,27 +340,16 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
     labels:
-      traefik.enable: "true"
-      traefik.backend: jackett
-      traefik.protocol: http
-      traefik.port: 9117
-      traefik.frontend.rule: Host:jackett.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: jackett.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.portainer-rtr.entrypoints: https
+      traefik.http.routers.portainer-rtr.rule: Host(`jackett.${DOMAINNAME}`)
+      traefik.http.routers.portainer-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.portainer-rtr.service: index-svc
+      traefik.http.services.portainer-svc.loadbalancer.server.port: ${JACKETT_PORT}
 
 ############################# PVRS
 
@@ -552,9 +360,9 @@ services:
     hostname: lidarr
     restart: unless-stopped
     networks:
-      - traefik_proxy
+      - t2_proxy
     ports:
-      - "${LIDARR_PORT}:8686"
+      - ${LIDARR_PORT}:${LIDARR_PORT}
     volumes:
       - ${USERDIR}/docker/lidarr:/config
       - ${DOWNLOAD_DIR}:/downloads
@@ -565,27 +373,16 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
     labels:
-      traefik.enable: "true"
-      traefik.backend: lidarr
-      traefik.protocol: http
-      traefik.port: 8686
-      traefik.frontend.rule: Host:lidarr.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: lidarr.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}' 
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.portainer-rtr.entrypoints: https
+      traefik.http.routers.portainer-rtr.rule: Host(`lidarr.${DOMAINNAME}`)
+      traefik.http.routers.portainer-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.portainer-rtr.service: index-svc
+      traefik.http.services.portainer-svc.loadbalancer.server.port: ${LIDARR_PORT}
 
 # Radarr - Movie management
   radarr:
@@ -594,9 +391,9 @@ services:
     hostname: radarr
     restart: unless-stopped
     networks:
-      - traefik_proxy
+      - t2_proxy
     ports:
-      - "${RADARR_PORT}:7878"
+      - ${RADARR_PORT}:${RADARR_PORT}
     volumes:
       - ${USERDIR}/docker/radarr:/config
       - ${DOWNLOAD_DIR}:/downloads
@@ -607,27 +404,16 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
     labels:
-      traefik.enable: "true"
-      traefik.backend: radarr
-      traefik.protocol: http
-      traefik.port: 7878
-      traefik.frontend.rule: Host:radarr.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: radarr.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.portainer-rtr.entrypoints: https
+      traefik.http.routers.portainer-rtr.rule: Host(`radarr.${DOMAINNAME}`)
+      traefik.http.routers.portainer-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.portainer-rtr.service: index-svc
+      traefik.http.services.portainer-svc.loadbalancer.server.port: ${RADARR_PORT}
 
 # Sonarr - TV Shows management
   sonarr:
@@ -636,9 +422,9 @@ services:
     hostname: sonarr
     restart: unless-stopped
     networks:
-      - traefik_proxy
+      - t2_proxy
     ports:
-      - "${SONARR_PORT}:8989"
+      - ${SONARR_PORT}:${SONARR_PORT}
     volumes:
       - ${USERDIR}/docker/sonarr:/config
       - ${DOWNLOAD_DIR}:/downloads
@@ -649,27 +435,16 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
     labels:
-      traefik.enable: "true"
-      traefik.backend: sonarr
-      traefik.protocol: http
-      traefik.port: 8989
-      traefik.frontend.rule: Host:sonarr.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: sonarr.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.portainer-rtr.entrypoints: https
+      traefik.http.routers.portainer-rtr.rule: Host(`sonarr.${DOMAINNAME}`)
+      traefik.http.routers.portainer-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.portainer-rtr.service: index-svc
+      traefik.http.services.portainer-svc.loadbalancer.server.port: ${SONARR_PORT}
 
 ############################# MEDIA
 
@@ -680,9 +455,9 @@ services:
     hostname: ombi
     restart: unless-stopped
     networks:
-      - traefik_proxy
+      - t2_proxy
     ports:
-      - "${OMBI_PORT}:3579"
+      - ${OMBI_PORT}:${OMBI_PORT}
     volumes:
       - ${USERDIR}/docker/ombi:/config
     environment:
@@ -690,24 +465,16 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
     labels:
-      traefik.enable: "true"
-      traefik.backend: ombi
-      traefik.protocol: http
-      traefik.port: 3579
-      traefik.frontend.rule: Host:ombi.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: ombi.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.portainer-rtr.entrypoints: https
+      traefik.http.routers.portainer-rtr.rule: Host(`ombi.${DOMAINNAME}`)
+      traefik.http.routers.portainer-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.portainer-rtr.service: index-svc
+      traefik.http.services.portainer-svc.loadbalancer.server.port: ${OMBI_PORT}
 
 # Tautulli - Previously PlexPy. Plex statistics and monitoring
   tautulli:
@@ -716,9 +483,9 @@ services:
     hostname: tautulli
     restart: unless-stopped
     networks:
-      - traefik_proxy
+      - t2_proxy
     ports:
-      - "${TAUTULLI_PORT}:8181"
+      - "${TAUTULLI_PORT}:${TAUTULLI_PORT}"
     volumes:
       - ${USERDIR}/docker/tautulli/config:/config
       - ${USERDIR}/docker/tautulli/logs:/logs:ro
@@ -727,172 +494,18 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
     labels:
-      traefik.enable: "true"
-      traefik.backend: tautulli
-      traefik.protocol: http
-      traefik.port: 8181
-      traefik.frontend.rule: Host:tautulli.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: tautulli.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-
-# Plex-Sync - For Syncing watched status between plex servers 
-  plex-sync:
-    image: patsissons/plex-sync:develop
-    container_name: plex-sync
-    environment:
-      INITIAL_RUN: "true"
-#      DRY_RUN: 0
-      CRON_SCHEDULE: '*/5 * * * *'
-      SECTION_MAPS:
-    restart: unless-stopped
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.portainer-rtr.entrypoints: https
+      traefik.http.routers.portainer-rtr.rule: Host(`tautulli.${DOMAINNAME}`)
+      traefik.http.routers.portainer-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.portainer-rtr.service: index-svc
+      traefik.http.services.portainer-svc.loadbalancer.server.port: ${TAUTULLI_PORT}
 
 ############################# MEDIA FILE MANAGEMENT
-
-# Picard - Music Library Tagging and Management
-  picard:
-    image: mikenye/picard
-    container_name: picard
-    hostname: picard
-    restart: unless-stopped
-    networks:
-      - traefik_proxy
-    ports:
-      - "${PICARD_PORT}:5800"
-    volumes:
-      - ${DOWNLOAD_DIR}/wip_media:/wip_media:rw
-      - ${USERDIR}/docker/picard:/config:rw
-      - ${MUSIC_DIR}:/music:rw
-    environment:
-      USER_ID: ${PUID}
-      GROUP_ID: ${PGID}
-      TZ: ${TZ}
-      UMASK: 002
-      DISPLAY_WIDTH: 1600
-      DISPLAY_HEIGHT: 960
-    labels:
-      traefik.enable: "true"
-      traefik.backend: picard
-      traefik.protocol: http
-      traefik.port: 5800
-      traefik.frontend.rule: Host:picard.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: picard.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
-
-# Bazarr - Subtitle Management
-  bazarr:
-    image: linuxserver/bazarr
-    container_name: bazarr
-    hostname: bazarr
-    restart: unless-stopped
-    networks:
-      - traefik_proxy
-    ports:
-      - "${BAZARR_PORT}:6767"
-    volumes:
-      - ${USERDIR}/docker/bazarr:/config
-      - ${MOVIES_DIR}:/movies
-      - ${TV_DIR}:/TV
-    environment:
-      PUID: ${PUID}
-      PGID: ${PGID}
-      TZ: ${TZ}
-    labels:
-      traefik.enable: "true"
-      traefik.backend: bazarr
-      traefik.protocol: http
-      traefik.port: 6767
-      traefik.frontend.rule: Host:bazarr.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: bazarr.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
-
-# Handbrake - Video Conversion (Transcoding and compression)
-  handbrake:
-    image: jlesage/handbrake
-    container_name: handbrake
-    hostname: handbrake
-    restart: unless-stopped
-    networks:
-      - traefik_proxy
-    ports:
-      - "${HANDBRAKE_PORT}:5800"
-    volumes:
-      - ${DOWNLOAD_DIR}:/downloads:ro
-      - ${USERDIR}/docker/handbrake/config:/config:rw
-      - ${USERDIR}/docker/handbrake/watch:/watch:rw
-      - ${DOWNLOAD_DIR}/wip_media:/output:rw
-      - ${MEDIA_DIR}:/media:rw
-    environment:
-      USER_ID: ${PUID}
-      GROUP_ID: ${PGID}
-      UMASK: 002
-      TZ: ${TZ}
-      KEEP_APP_RUNNING: 1
-      CLEAN_TMP_DIR: 1
-      DISPLAY_WIDTH: 1600
-      DISPLAY_HEIGHT: 960
-      AUTOMATED_CONVERSION_KEEP_SOURCE: 1
-      VNC_PASSWORD: ${HANDBRAKE_VNC_PASSWD}
-    labels:
-      traefik.enable: "true"
-      traefik.backend: handbrake
-      traefik.protocol: http
-      traefik.port: 5800
-      traefik.frontend.rule: Host:handbrake.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: handbrake.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
 
 # MKVToolNix - Video Editing (Remuxing - changing media container while keeping original source quality)
   mkvtoolnix:
@@ -901,9 +514,9 @@ services:
     hostname: mkvtoolnix
     restart: unless-stopped
     networks:
-      - traefik_proxy
+      - t2_proxy
     ports:
-      - "${MKVTOOLNIX_PORT}:5800"
+      - ${MKVTOOLNIX_PORT}:${MKVTOOLNIX_PORT}
     volumes:
       - ${DOWNLOAD_DIR}:/downloads:rw
       - ${MEDIA_DIR}:/media:rw
@@ -919,38 +532,18 @@ services:
       DISPLAY_HEIGHT: 960
       VNC_PASSWORD: ${MKVTOOLNIX_VNC_PASSWD}
     labels:
-      traefik.enable: "true"
-      traefik.backend: mkvtoolnix
-      traefik.protocol: http
-      traefik.port: 5800
-      traefik.frontend.rule: Host:mkvtoolnix.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: mkvtoolnix.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.portainer-rtr.entrypoints: https
+      traefik.http.routers.portainer-rtr.rule: Host(`mkv.${DOMAINNAME}`)
+      traefik.http.routers.portainer-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.portainer-rtr.service: index-svc
+      traefik.http.services.portainer-svc.loadbalancer.server.port: ${MKVTOOLNIX_PORT}
 
 ############################# UTILITIES
-
-# Guacamole - Remote desktop, SSH, on Telnet on any HTML5 Browser 
-# phpmyadmin create database guacamole_db
-# add user guacamole_user with priviledges SELECT,INSERT,UPDATE,DELETE,CREATE
-# cd ~/docker
-# docker run --rm guacamole/guacamole /opt/guacamole/bin/initdb.sh --mysql > initdb.sql
-# cp initdb.sql shared/
-# from in /shared in mariadb container
-# mysql guacamole_db -u guacamole_user -pguacamole -h mariadb < initdb.sql
 
 # Glances - System Information
   glances:
@@ -961,9 +554,9 @@ services:
     privileged: true
 #    network_mode: host
     networks:
-      - traefik_proxy
+      - t2_proxy
     ports:
-      - "${GLANCES_PORT}:61208"
+      - ${GLANCES_PORT}:${GLANCES_PORT}
     pid: host
     volumes:
       - ${USERDIR}/docker/glances:/glances/conf # Use this if you want to add a glances.conf file
@@ -972,145 +565,18 @@ services:
 #      GLANCES_OPT: "-C /glances/conf/glances.conf --quiet --export influxdb"
       GLANCES_OPT: "-w"
     labels:
-      traefik.enable: "true"
-      traefik.backend: glances
-      traefik.protocol: http
-      traefik.port: 61208
-      traefik.frontend.rule: Host:glances.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: glances.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
-
-# Nextcloud
-# remove /config/nginx/site-confs/default
-# add whitelist in config.php
-  nextcloud:
-    container_name: nextcloud
-    restart: always
-    image: linuxserver/nextcloud
-    volumes:
-      - ${USERDIR}/docker/nextcloud:/config
-      - ${USERDIR}/shared:/shared
-      - ${NEXTCLOUD_DIR}:/data
-    ports:
-      - "${NEXTCLOUD_PORT}:443"
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - MYSQL_DATABASE=${NEXTCLOUD_DB}
-      - MYSQL_USER=${NEXTCLOUD_DB_USER}
-      - MYSQL_PASSWORD=${NEXTCLOUD_DB_PASS}
-      - MYSQL_HOST=${DB_HOST}
-    networks:
-      - traefik_proxy
-    labels:
-      traefik.enable: "true"
-      traefik.backend: nextcloud
-      traefik.protocol: https
-      traefik.port: 443
-      traefik.frontend.rule: Host:nextcloud.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: nextcloud.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.portainer-rtr.entrypoints: https
+      traefik.http.routers.portainer-rtr.rule: Host(`glances.${DOMAINNAME}`)
+      traefik.http.routers.portainer-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.portainer-rtr.service: index-svc
+      traefik.http.services.portainer-svc.loadbalancer.server.port: ${GLANCES_PORT}
 
 ############################# TESTING 
-
-  monopoly:
-    image: gonzague/monopoly
-    hostname: monopoly
-    container_name: monopoly
-    restart: unless-stopped
-    networks:
-      - traefik_proxy
-    volumes:
-      - ${USERDIR}/docker/monopoly:/config
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - HTTP=true
-    ports:
-      - "8443:8443"
-    labels:
-      traefik.enable: "true"
-      traefik.backend: monopoly 
-      traefik.protocol: http
-      traefik.port: 8443
-      traefik.frontend.rule: Host:monopoly.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: monopoly.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
-
-  grafana:
-    image: grafana/grafana
-    hostname: grafana
-    container_name: grafana
-    restart: unless-stopped
-    user: "1000"
-    networks:
-      - traefik_proxy
-    volumes:
-      - ${USERDIR}/docker/grafana:/var/lib/grafana
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    ports:
-      - "3000:3000"
-    labels:
-      traefik.enable: "true"
-      traefik.backend: grafana
-      traefik.protocol: http
-      traefik.port: 3000
-      traefik.frontend.rule: Host:grafana.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: grafana.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
 
 
 ############################# MAINTENANCE
