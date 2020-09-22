@@ -545,6 +545,16 @@ services:
 
 ############################# UTILITIES
 
+# Guacamole Daemon
+  guacd:
+    image: guacamole/guacd
+    container_name: guacd
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - t2_proxy
+
 # Glances - System Information
   glances:
     image: nicolargo/glances
