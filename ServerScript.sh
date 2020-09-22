@@ -23,6 +23,6 @@ pushd /home/sam/docker/
 echo -e "${CYAN}Backing up previous compose file${NC}"
 cp /home/sam/docker/docker-compose.yml /home/sam/docker/docker-compose.bak
 echo -e "${CYAN}Importing compose from repository${NC}"
-cp /home/sam/github/HomeServer/docker-composet1.yml /home/sam/docker/docker-compose.yml
+cp /home/sam/github/HomeServer/docker-composet2.yml /home/sam/docker/docker-compose.yml
 echo -e "${CYAN}Attempting docker recreate${NC}"
 docker-compose -f ~/docker/docker-compose.yml up -d
