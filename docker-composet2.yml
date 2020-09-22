@@ -579,6 +579,7 @@ services:
       traefik.http.routers.guacamole-rtr.tls: true
       ## Middlewares
       traefik.http.routers.guacamole-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.middlewares.add-guacamole.addPrefix.prefix: /guacamole
       ## HTTP Services
       traefik.http.routers.guacamole-rtr.service: guacamole-svc
       traefik.http.services.guacamole-svc.loadbalancer.server.port: 8080
