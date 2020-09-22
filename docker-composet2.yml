@@ -555,6 +555,34 @@ services:
     networks:
       - t2_proxy
 
+# Guacamole
+  guacamole:
+    image: guacamole/guacamole:latest
+    container_name: guacamole
+    restart: unless-stopped
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges
+    environment:
+      GUACD_HOSTNAME: guacd
+      MYSQL_HOSTNAME: ${DB_HOST}
+      MYSQL_PORT: ${DB_PORT}
+      MYSQL_DATABASE: guacamole
+      MYSQL_USER: guacdb_user
+      MYSQL_PASSWORD: Willis123!
+    labels:
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.guacamole-rtr.entrypoints: https
+      traefik.http.routers.guacamole-rtr.rule: Host(`guac.${DOMAINNAME}`)
+      traefik.http.routers.guacamole-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.guacamole-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.guacamole-rtr.service: guacamole-svc
+      traefik.http.services.guacamole-svc.loadbalancer.server.port: 8080
+
 # Glances - System Information
   glances:
     image: nicolargo/glances
