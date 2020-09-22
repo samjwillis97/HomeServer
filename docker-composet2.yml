@@ -129,17 +129,17 @@ services:
     networks:
       - t2_proxy
     environment:
-      CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      SECRET: ${OAUTH_SECRET}
-      COOKIE_DOMAIN: ${DOMAINNAME}
-      INSECURE_COOKIE: "false"
-      AUTH_HOST: oauth.${DOMAINNAME}
-      URL_PATH: /_oauth
-      WHITELIST: ${MY_EMAIL},ozpyes@gmail.com
-      LOG_LEVEL: info
-      LOG_FORMAT: text
-      LIFETIME: 2592000 # 30 days
+      - CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - SECRET=${OAUTH_SECRET}
+      - COOKIE_DOMAIN=${DOMAINNAME}
+      - INSECURE_COOKIE=false
+      - AUTH_HOST=oauth.${DOMAINNAME}
+      - URL_PATH=/_oauth
+      - WHITELIST=${MY_EMAIL},ozpyes@gmail.com
+      - LOG_LEVEL=info
+      - LOG_FORMAT=text
+      - LIFETIME=2592000 # 30 days
     labels:
       traefik.enable: true
       ## HTTP Routers
