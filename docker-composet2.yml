@@ -286,7 +286,7 @@ services:
       traefik.http.routers.php-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
       traefik.http.routers.php-rtr.service: php-svc
-      traefik.http.services.php-svc.loadbalancer.server.port: ${PHPMYADMIN_PORT}
+      traefik.http.services.php-svc.loadbalancer.server.port: 80
 
 ############################# DOWNLOADERS
 
