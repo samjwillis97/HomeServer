@@ -201,14 +201,14 @@ services:
     labels:
       traefik.enable: true
       ## HTTP Routers
-      traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`www.${DOMAINNAME}`)
-      traefik.http.routers.portainer-rtr.tls: true
+      traefik.http.routers.organizr-rtr.entrypoints: https
+      traefik.http.routers.organizr-rtr.rule: Host(`www.${DOMAINNAME}`)
+      traefik.http.routers.organizr-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.organizr-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
-      traefik.http.routers.portainer-rtr.service: organizr-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: 80
+      traefik.http.routers.organizr-rtr.service: organizr-svc
+      traefik.http.services.organizr-svc.loadbalancer.server.port: 80
 
 ## Autoindex - Simple Directory Index
   autoindex:
@@ -227,14 +227,14 @@ services:
     labels:
       traefik.enable: true
       ## HTTP Routers
-      traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`index.${DOMAINNAME}`)
-      traefik.http.routers.portainer-rtr.tls: true
+      traefik.http.routers.index-rtr.entrypoints: https
+      traefik.http.routers.index-rtr.rule: Host(`index.${DOMAINNAME}`)
+      traefik.http.routers.index-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.index-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
-      traefik.http.routers.portainer-rtr.service: index-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: 80
+      traefik.http.routers.index-rtr.service: index-svc
+      traefik.http.services.index-svc.loadbalancer.server.port: 80
 
 ############################# DATABASE
 
@@ -279,14 +279,14 @@ services:
     labels:
       traefik.enable: true
       ## HTTP Routers
-      traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`pma.${DOMAINNAME}`)
-      traefik.http.routers.portainer-rtr.tls: true
+      traefik.http.routers.php-rtr.entrypoints: https
+      traefik.http.routers.php-rtr.rule: Host(`pma.${DOMAINNAME}`)
+      traefik.http.routers.php-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.php-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
-      traefik.http.routers.portainer-rtr.service: index-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: ${PHPMYADMIN_PORT}
+      traefik.http.routers.php-rtr.service: php-svc
+      traefik.http.services.php-svc.loadbalancer.server.port: ${PHPMYADMIN_PORT}
 
 ############################# DOWNLOADERS
 
@@ -310,14 +310,14 @@ services:
     labels:
       traefik.enable: true
       ## HTTP Routers
-      traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`deluge.${DOMAINNAME}`)
-      traefik.http.routers.portainer-rtr.tls: true
+      traefik.http.routers.deluge-rtr.entrypoints: https
+      traefik.http.routers.deluge-rtr.rule: Host(`deluge.${DOMAINNAME}`)
+      traefik.http.routers.deluge-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.deluge-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
-      traefik.http.routers.portainer-rtr.service: index-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: ${DELUGE_PORT}
+      traefik.http.routers.deluge-rtr.service: deluge-svc
+      traefik.http.services.deluge-svc.loadbalancer.server.port: ${DELUGE_PORT}
 
 ############################# INDEXERS
 
@@ -342,14 +342,14 @@ services:
     labels:
       traefik.enable: true
       ## HTTP Routers
-      traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`jackett.${DOMAINNAME}`)
-      traefik.http.routers.portainer-rtr.tls: true
+      traefik.http.routers.jacket-rtr.entrypoints: https
+      traefik.http.routers.jacket-rtr.rule: Host(`jackett.${DOMAINNAME}`)
+      traefik.http.routers.jacket-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.jacket-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
-      traefik.http.routers.portainer-rtr.service: index-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: ${JACKETT_PORT}
+      traefik.http.routers.jacket-rtr.service: jacket-svc
+      traefik.http.services.jacket-svc.loadbalancer.server.port: ${JACKETT_PORT}
 
 ############################# PVRS
 
@@ -375,14 +375,14 @@ services:
     labels:
       traefik.enable: true
       ## HTTP Routers
-      traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`lidarr.${DOMAINNAME}`)
-      traefik.http.routers.portainer-rtr.tls: true
+      traefik.http.routers.lidarr-rtr.entrypoints: https
+      traefik.http.routers.lidarr-rtr.rule: Host(`lidarr.${DOMAINNAME}`)
+      traefik.http.routers.lidarr-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.lidarr-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
-      traefik.http.routers.portainer-rtr.service: index-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: ${LIDARR_PORT}
+      traefik.http.routers.lidarr-rtr.service: lidarr-svc
+      traefik.http.services.lidarr-svc.loadbalancer.server.port: ${LIDARR_PORT}
 
 # Radarr - Movie management
   radarr:
@@ -406,14 +406,14 @@ services:
     labels:
       traefik.enable: true
       ## HTTP Routers
-      traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`radarr.${DOMAINNAME}`)
-      traefik.http.routers.portainer-rtr.tls: true
+      traefik.http.routers.radarr-rtr.entrypoints: https
+      traefik.http.routers.radarr-rtr.rule: Host(`radarr.${DOMAINNAME}`)
+      traefik.http.routers.radarr-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.radarr-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
-      traefik.http.routers.portainer-rtr.service: index-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: ${RADARR_PORT}
+      traefik.http.routers.radarr-rtr.service: radarr-svc
+      traefik.http.services.radarr-svc.loadbalancer.server.port: ${RADARR_PORT}
 
 # Sonarr - TV Shows management
   sonarr:
@@ -437,14 +437,14 @@ services:
     labels:
       traefik.enable: true
       ## HTTP Routers
-      traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`sonarr.${DOMAINNAME}`)
-      traefik.http.routers.portainer-rtr.tls: true
+      traefik.http.routers.sonarr-rtr.entrypoints: https
+      traefik.http.routers.sonarr-rtr.rule: Host(`sonarr.${DOMAINNAME}`)
+      traefik.http.routers.sonarr-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.sonarr-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
-      traefik.http.routers.portainer-rtr.service: index-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: ${SONARR_PORT}
+      traefik.http.routers.sonarr-rtr.service: sonarr-svc
+      traefik.http.services.sonarr-svc.loadbalancer.server.port: ${SONARR_PORT}
 
 ############################# MEDIA
 
@@ -467,14 +467,14 @@ services:
     labels:
       traefik.enable: true
       ## HTTP Routers
-      traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`ombi.${DOMAINNAME}`)
-      traefik.http.routers.portainer-rtr.tls: true
+      traefik.http.routers.ombi-rtr.entrypoints: https
+      traefik.http.routers.ombi-rtr.rule: Host(`ombi.${DOMAINNAME}`)
+      traefik.http.routers.ombi-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.ombi-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
-      traefik.http.routers.portainer-rtr.service: index-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: ${OMBI_PORT}
+      traefik.http.routers.ombi-rtr.service: ombi-svc
+      traefik.http.services.ombi-svc.loadbalancer.server.port: ${OMBI_PORT}
 
 # Tautulli - Previously PlexPy. Plex statistics and monitoring
   tautulli:
@@ -496,14 +496,14 @@ services:
     labels:
       traefik.enable: true
       ## HTTP Routers
-      traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`tautulli.${DOMAINNAME}`)
-      traefik.http.routers.portainer-rtr.tls: true
+      traefik.http.routers.tautulli-rtr.entrypoints: https
+      traefik.http.routers.tautulli-rtr.rule: Host(`tautulli.${DOMAINNAME}`)
+      traefik.http.routers.tautulli-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.tautulli-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
-      traefik.http.routers.portainer-rtr.service: index-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: ${TAUTULLI_PORT}
+      traefik.http.routers.tautulli-rtr.service: tautulli-svc
+      traefik.http.services.tautulli-svc.loadbalancer.server.port: ${TAUTULLI_PORT}
 
 ############################# MEDIA FILE MANAGEMENT
 
@@ -534,14 +534,14 @@ services:
     labels:
       traefik.enable: true
       ## HTTP Routers
-      traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`mkv.${DOMAINNAME}`)
-      traefik.http.routers.portainer-rtr.tls: true
+      traefik.http.routers.mkv-rtr.entrypoints: https
+      traefik.http.routers.mkv-rtr.rule: Host(`mkv.${DOMAINNAME}`)
+      traefik.http.routers.mkv-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.mkv-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
-      traefik.http.routers.portainer-rtr.service: index-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: ${MKVTOOLNIX_PORT}
+      traefik.http.routers.mkv-rtr.service: mkv-svc
+      traefik.http.services.mkv-svc.loadbalancer.server.port: ${MKVTOOLNIX_PORT}
 
 ############################# UTILITIES
 
@@ -567,14 +567,14 @@ services:
     labels:
       traefik.enable: true
       ## HTTP Routers
-      traefik.http.routers.portainer-rtr.entrypoints: https
-      traefik.http.routers.portainer-rtr.rule: Host(`glances.${DOMAINNAME}`)
-      traefik.http.routers.portainer-rtr.tls: true
+      traefik.http.routers.glances-rtr.entrypoints: https
+      traefik.http.routers.glances-rtr.rule: Host(`glances.${DOMAINNAME}`)
+      traefik.http.routers.glances-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.glances-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
-      traefik.http.routers.portainer-rtr.service: index-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: ${GLANCES_PORT}
+      traefik.http.routers.glances-rtr.service: glances-svc
+      traefik.http.services.glances-svc.loadbalancer.server.port: ${GLANCES_PORT}
 
 ############################# TESTING 
 
