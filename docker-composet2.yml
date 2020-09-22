@@ -133,7 +133,7 @@ services:
       CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       SECRET: ${OAUTH_SECRET}
       COOKIE_DOMAIN: ${DOMAINNAME}
-      INSECURE_COOKIE: false
+      INSECURE_COOKIE: "false"
       AUTH_HOST: oauth.${DOMAINNAME}
       URL_PATH: /_oauth
       WHITELIST: ${MY_EMAIL},ozpyes@gmail.com
@@ -295,7 +295,7 @@ services:
     image: linuxserver/deluge
     container_name: deluge
     networks:
-      - 
+      - t2_proxy
     ports:
       - ${DELUGE_PORT}:${DELUGE_PORT}
     environment:
