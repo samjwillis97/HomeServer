@@ -663,11 +663,6 @@ services:
       - ${USERDIR}/docker/statping:/app
     environment:
       DB_CONN: mysql
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_DATABASE: statping
-      DB_USER: statping_user
-      DB_PASS: Willis123!
     labels:
       traefik.enable: true
       ## HTTP Routers
