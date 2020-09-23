@@ -554,7 +554,7 @@ services:
       - t2_proxy
     security_opt:
       - no-new-privileges: true
-      - seccomp: unconfined
+      - seccomp: "unconfined"
     volumes:
       - ${USERDIR}/docker/firefox:/config
       - ${DOWNLOAD_DIR}:/config/downloads
