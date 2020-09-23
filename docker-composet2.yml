@@ -662,7 +662,7 @@ services:
     volumes:
       - ${USERDIR}/docker/statping:/app
     environment:
-      DB_CONN: mariadb
+      DB_CONN: mysql
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       DB_DATABASE: statping
