@@ -12,4 +12,4 @@
     [http.services.freenas-svc.loadBalancer]
       passHostHeader = true
       [[http.services.freenas-svc.loadBalancer.servers]]
-        url = "http://10.1.1.191:80" # or whatever your external host's IP:port is
+        url = "http://10.1.1.191:80"
