@@ -1,6 +1,7 @@
 [http.routers]
 	[http.routers.proxmox-rtr]
       entryPoints = ["https"]
+      InsecureSkipVerify = true
       rule = "Host(`prox.willishomeserver.com`)"
       service = "proxmox-svc"
       middlewares = ["chain-oauth"]
