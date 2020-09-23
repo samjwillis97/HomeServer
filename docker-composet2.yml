@@ -568,7 +568,6 @@ services:
       CLEAN_TMP_DIR: 1
       DISPLAY_WIDTH: 1600
       DISPLAY_HEIGHT: 900
-      VNC_PASSWORD: Willis123!
     labels:
       traefik.enable: true
       ## HTTP Routers
