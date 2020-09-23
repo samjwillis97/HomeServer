@@ -1,0 +1,14 @@
+[http.routers]
+	[http.routers.freenas-rtr]
+      entryPoints = ["https"]
+      rule = "Host(`ssh.willishomeserver.com`)"
+      service = "ssh-svc"
+      [http.routers.ssh-rtr.tls]
+        certresolver = "dns-cloudflare"
+
+[http.services]
+  [http.services.ssh-svc]
+    [http.services.ssh-svc.loadBalancer]
+      passHostHeader = true
+      [[http.services.ssh-svc.loadBalancer.servers]]
+        url = "10.1.1.141:22"
