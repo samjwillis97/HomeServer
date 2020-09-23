@@ -1,6 +1,6 @@
 [http.routers]
 	[http.routers.proxmox-rtr]
-      entryPoints = ["http"]
+      entryPoints = ["https"]
       rule = "Host(`prox.willishomeserver.com`)"
       service = "proxmox-svc"
       middlewares = ["chain-oauth"]
@@ -12,4 +12,4 @@
     [http.services.proxmox-svc.loadBalancer]
       passHostHeader = true
       [[http.services.proxmox-svc.loadBalancer.servers]]
-        url = "https://10.1.1.230:8006"
+        url = "10.1.1.230:8006"
