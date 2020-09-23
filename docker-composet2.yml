@@ -578,7 +578,7 @@ services:
       traefik.http.routers.guacamole-rtr.rule: Host(`guac.${DOMAINNAME}`)
       traefik.http.routers.guacamole-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.guacamole-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.guacamole-rtr.middlewares: chain-oauth@file,add-guacamole # Google OAuth 2.0
       traefik.http.middlewares.add-guacamole.addPrefix.prefix: /guacamole
       ## HTTP Services
       traefik.http.routers.guacamole-rtr.service: guacamole-svc
