@@ -547,7 +547,7 @@ services:
 
 # firefox
   firefox:
-    image: jlessage/firefox:latest
+    image: jlesage/firefox:latest
     container_name: firefox
     restart: unless-stopped
     networks:
