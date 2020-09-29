@@ -12,4 +12,4 @@
   [http.services.proxmox-svc]
     [http.services.proxmox-svc.loadBalancer]
       [[http.services.proxmox-svc.loadBalancer.servers]]
-        url = "10.1.1.230:8006"
+        address = "10.1.1.230:8006"
