@@ -11,4 +11,4 @@
     [http.services.ssh-svc.loadBalancer]
       passHostHeader = true
       [[http.services.ssh-svc.loadBalancer.servers]]
-        url = "10.1.1.141:22"
+        address = "10.1.1.141:22"
