@@ -19,7 +19,7 @@ log_level: warn
 # jwt_secret: SECRET_GOES_HERE # use docker secret file instead AUTHELIA_JWT_SECRET_FILE
 
 # https://docs.authelia.com/configuration/miscellaneous.html#default-redirection-url
-default_redirection_url: https://authelia.example.com
+default_redirection_url: https://authelia.willishomeserver.com
 
 totp:
   issuer: authelia.com
@@ -39,7 +39,7 @@ authentication_backend:
 access_control:
   default_policy: deny
   rules:
-    - domain: authelia.example.com
+    - domain: authelia.willishomeserver.com
       policy: bypass
     - domain:
         - "*.willishomeserver.com"

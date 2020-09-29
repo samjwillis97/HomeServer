@@ -718,31 +718,6 @@ services:
       traefik.http.routers.glances-rtr.service: glances-svc
       traefik.http.services.glances-svc.loadbalancer.server.port: ${GLANCES_PORT}
 
-# StatPing - Status and Monitoring Page
-  statping:
-    image: hunterlong/statping:latest
-    container_name: statping
-    restart: unless-stopped
-    networks:
-      - t2_proxy
-    security_opt:
-      - no-new-privileges:true
-    volumes:
-      - ${USERDIR}/docker/statping:/app
-    environment:
-      DB_CONN: mysql
-    labels:
-      traefik.enable: true
-      ## HTTP Routers
-      traefik.http.routers.statping-rtr.entrypoints: https
-      traefik.http.routers.statping-rtr.rule: Host(`statping.${DOMAINNAME}`)
-      traefik.http.routers.statping-rtr.tls: true
-      ## Middlewares
-      traefik.http.routers.statping-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
-      ## HTTP Services
-      traefik.http.routers.statping-rtr.service: statping-svc
-      traefik.http.services.statping-svc.loadbalancer.server.port: 8080
-
 ############################# TESTING 
 
 
