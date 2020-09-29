@@ -42,6 +42,6 @@
       authResponseHeaders = ["X-Forwarded-User"]
   [http.middlewares.middlewares-authelia]
     [http.middlewares.middlewares-authelia.forwardAuth]
-			address = "http://authelia:9091/api/verify?rd=https://authelia.willishomeserver.com"
-			trustForwardHeader = true
-			authResponseHeaders = ["Remote-User", "Remote-Groups"]
+      address = "http://authelia:9091/api/verify?rd=https://authelia.willishomeserver.com"
+      trustForwardHeader = true
+      authResponseHeaders = ["Remote-User", "Remote-Groups"]
