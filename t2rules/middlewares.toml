@@ -40,8 +40,8 @@
       address = "http://oauth:4181" # Make sure you have the OAuth service in docker-compose.yml
       trustForwardHeader = true
       authResponseHeaders = ["X-Forwarded-User"]
-	[http.middlewares.middlewares-authelia]
-		[http.middlewares.middlewares-authelia.forwardAuth]
+  [http.middlewares.middlewares-authelia]
+    [http.middlewares.middlewares-authelia.forwardAuth]
 			address = "http://authelia:9091/api/verify?rd=https://authelia.willishomeserver.com"
 			trustForwardHeader = true
 			authResponseHeaders = ["Remote-User", "Remote-Groups"]
