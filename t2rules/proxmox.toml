@@ -6,10 +6,10 @@
       middlewares = ["chain-oauth"]
       [http.routers.proxmox-rtr.tls]
         certresolver = "dns-cloudflare"
+        passthrough = true
 
 [http.services]
   [http.services.proxmox-svc]
     [http.services.proxmox-svc.loadBalancer]
-      passHostHeader = true
       [[http.services.proxmox-svc.loadBalancer.servers]]
         url = "10.1.1.230:8006"
