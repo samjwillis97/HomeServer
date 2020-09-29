@@ -517,6 +517,10 @@ services:
     ports:
       - "${JELLYFIN_PORT}:8096"
       - "8920:8920"
+    volumes:
+      - ${USERDIR}/docker/jellyfin:/config
+      # - ${MEDIA_DIR}:/nas
+      - ${MEDIA_DIR}:/nas:ro
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
