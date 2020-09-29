@@ -61,7 +61,7 @@ session:
   domain: willishomeserver.com
 
 regulation:
-  max_retires: 3
+  max_retries: 3
   find_time: 120
   ban_time: 300
 
