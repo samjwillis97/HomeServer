@@ -34,6 +34,13 @@ networks:
     driver: bridge
 
 ########################### SERVICES
+secrets:
+  authelia_jwt_secret:
+    file: ${SECRETS_DIR}/authelia_jwt_secret
+  authelia_session_secret:
+    file: ${SECRETS_DIR}/authelia_session_secret
+
+########################### SERVICES
 services:
 
 ########################### FRONTENDS
@@ -151,6 +158,34 @@ services:
       traefik.http.services.oauth-svc.loadbalancer.server.port: 4181
       ## Middlewares
       traefik.http.routers.oauth-rtr.middlewares: chain-oauth@file
+
+# Authelia (Lite) - Self-Hosted
+  authelia: 
+    container_name: authelia
+    image: authelia/authelia:4.21.0
+    restart: always
+    networks:
+      - t2_proxy
+    volumes:
+      - ${USERDIR}/docker/authelia:/config
+    environment:
+      - TZ=${TZ}
+      - AUTHELIA_JWT_SECRET_FILE=/run/secrets/authelia_jwt_secret
+      - AUTHELIA_SESSION_SECRET_FILE=/run/secrets/authelia_session_secret
+    secrets:
+      - authelia_jwt_secret
+      - authelia_session_secret
+    labels:
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.authelia-rtr.entrypoints: https
+      traefik.http.routers.authelia-rtr.rule: Host(`authelia.${DOMAINNAME}`)
+      traefik.http.routers.authelia-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.authelia-rtr.middlewares: chain-authelia@file
+      ## HTTP Services
+      traefik.http.routers.authelia-rtr.service: authelia-svc
+      traefik.http.services.authelia-svc.loadbalancer.server.port: 9091
 
 # Portainer - Container Management WebUI
   portainer:
