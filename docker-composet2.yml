@@ -745,6 +745,29 @@ services:
       ZBX_SERVER_PORT: 10051
       ZBX_PROXYMODE: 0
 
+  zabbix-agent:
+    image: zabbix/zabbix-agent:ubuntu-5.0.4
+    hostname: zabbix-agent
+    container_name: zabbix-agent
+    restart: unless-stopped
+    networks:
+      - default
+      - t2_proxy
+    ports:
+      - 10050:10050
+    volumes:
+      - ${USERDIR}/docker/zabbix/modules:/var/lib/zabbix/modules
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      ZBX_HOSTNAME: SJW-Ubuntu-VM-Agent
+      ZBX_SERVER_HOST: localhost:10051
+      ZBX_PASSIVE_ALLOW: true
+      ZBX_PASSIVESERVERS: localhost:10051
+      ZBX_ACTIVE_ALLOW: true
+      ZBX_ACTIVESERVERS: localhost:10051
+
 ############################# MAINTENANCE
 
 # Add, Oznu/Cloudflare-DDNS
