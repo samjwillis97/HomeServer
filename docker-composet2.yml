@@ -762,7 +762,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       ZBX_HOSTNAME: SJW-Ubuntu-VM-Agent
-      ZBX_SERVER_HOST: 127.0.0.1:10051
+      ZBX_SERVER_HOST: 127.0.0.1
       # ZBX_PASSIVE_ALLOW: true
       # ZBX_PASSIVESERVERS: localhost:10051
       # ZBX_ACTIVE_ALLOW: true
