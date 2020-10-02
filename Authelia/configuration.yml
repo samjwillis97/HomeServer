@@ -74,7 +74,6 @@ notifier:
   #   filename: /config/notifications.txt
   smtp:
     username: samjwillis
-    password: azRuY3NseDBtYm8w
     host: mail.smtp2go.com
     port: 587 
     sender: authlia@willishomeserver.com
