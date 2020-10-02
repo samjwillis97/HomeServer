@@ -39,8 +39,8 @@ secrets:
     file: ${SECRETS_DIR}/authelia_jwt_secret
   authelia_session_secret:
     file: ${SECRETS_DIR}/authelia_session_secret
-  smtp2go_password:
-    file: ${SECRETS_DIR}/smtp2go_password
+  authelia_notifier_smtp_password:
+    file: ${SECRETS_DIR}/authelia_notifier_smtp_password
 
 ########################### SERVICES
 services:
@@ -174,7 +174,7 @@ services:
       - TZ=${TZ}
       - AUTHELIA_JWT_SECRET_FILE=/run/secrets/authelia_jwt_secret
       - AUTHELIA_SESSION_SECRET_FILE=/run/secrets/authelia_session_secret
-      - AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE=/run/secrets/smtp2go_password
+      - AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE=/run/secrets/authelia_notifier_smtp_password
     secrets:
       - authelia_jwt_secret
       - authelia_session_secret
