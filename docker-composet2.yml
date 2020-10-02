@@ -764,9 +764,9 @@ services:
       ZBX_HOSTNAME: SJW-Ubuntu-VM-Agent
       ZBX_SERVER_HOST: localhost:10051
       # ZBX_PASSIVE_ALLOW: true
-      ZBX_PASSIVESERVERS: localhost:10051
+      # ZBX_PASSIVESERVERS: localhost:10051
       # ZBX_ACTIVE_ALLOW: true
-      ZBX_ACTIVESERVERS: localhost:10051
+      # ZBX_ACTIVESERVERS: localhost:10051
 
 ############################# MAINTENANCE
 
