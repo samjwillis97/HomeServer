@@ -736,6 +736,7 @@ services:
       - 3000:3000
     volumes:
       - ${USERDIR}/docker/grafana:/var/lib/grafana
+      - ${USERDIR}/docker/grafana/grafana.ini:/etc/grafana/grafana.ini
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
