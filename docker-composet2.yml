@@ -747,7 +747,7 @@ services:
       traefik.http.routers.grocy-rtr.rule: Host(`grocy.${DOMAINNAME}`)
       traefik.http.routers.grocy-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.grocy-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      # traefik.http.routers.grocy-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
       traefik.http.routers.grocy-rtr.service: grocy-svc
       traefik.http.services.grocy-svc.loadbalancer.server.port: 80
