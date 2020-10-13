@@ -724,6 +724,34 @@ services:
 
 ############################# TESTING 
 
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    hostname: grafana
+    restart: unless-stopped
+    networks:
+      - default
+      - t2_proxy
+    ports:
+      - 3000:3000
+    volumes:
+      - ${USERDIR}/docker/grafana:/var/lib/grafana
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    labels:
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.grafana-rtr.entrypoints: https
+      traefik.http.routers.grafana-rtr.rule: Host(`grafana.${DOMAINNAME}`)
+      traefik.http.routers.grafana-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.grafana-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.grafana-rtr.service: grafana-svc
+      traefik.http.services.grafana-svc.loadbalancer.server.port: 3000
+
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -736,6 +764,10 @@ services:
       - 9090:9090
     volumes:
       - ${USERDIR}/docker/prometheus:/etc/prometheus
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
 
   grocy:
     image: linuxserver/grocy
