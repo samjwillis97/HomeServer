@@ -753,6 +753,7 @@ services:
       traefik.http.routers.grafana-rtr.service: grafana-svc
       traefik.http.services.grafana-svc.loadbalancer.server.port: 3000
 
+  # https://devopscube.com/monitor-linux-servers-prometheus-node-exporter/
   prometheus:
     image: prom/prometheus
     container_name: prometheus
