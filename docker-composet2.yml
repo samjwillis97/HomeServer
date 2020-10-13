@@ -724,6 +724,19 @@ services:
 
 ############################# TESTING 
 
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    hostname: prometheus
+    restart: unless-stopped
+    networks:
+      - default
+      - t2_proxy
+    ports:
+      - 9090:9090
+    volumes:
+      - ${USERDIR}/docker/prometheus:/etc/prometheus
+
   grocy:
     image: linuxserver/grocy
     container_name: grocy
