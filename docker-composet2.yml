@@ -769,6 +769,17 @@ services:
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
+    labels:
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.prometheus-rtr.entrypoints: https
+      traefik.http.routers.prometheus-rtr.rule: Host(`prometheus.${DOMAINNAME}`)
+      traefik.http.routers.prometheus-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.prometheus-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.prometheus-rtr.service: prometheus-svc
+      traefik.http.services.prometheus-svc.loadbalancer.server.port: 80
 
   grocy:
     image: linuxserver/grocy
