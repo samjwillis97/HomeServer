@@ -724,6 +724,35 @@ services:
 
 ############################# TESTING 
 
+  docassemble:
+    image: jhpyle/docassemble
+    hostname: docassemble
+    container_name: docassemble
+    restart: unless-stopped
+    networks:
+      - default
+      - t2_proxy
+    ports:
+      - 3856:80
+      - 3756:443
+    volumes:
+      - ${USERDIR}/docker/docassemble:/usr/share/docassemble/backup
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    labels:
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.doc-rtr.entrypoints: https
+      traefik.http.routers.doc-rtr.rule: Host(`docs.${DOMAINNAME}`)
+      traefik.http.routers.doc-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.doc-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.doc-rtr.service: doc-svc
+      traefik.http.services.doc-svc.loadbalancer.server.port: 80
+
   grafana:
     image: grafana/grafana
     container_name: grafana
