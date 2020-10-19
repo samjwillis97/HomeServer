@@ -510,7 +510,7 @@ services:
       traefik.http.routers.ombi-rtr.rule: Host(`ombi.${DOMAINNAME}`)
       traefik.http.routers.ombi-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.ombi-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.ombi-rtr.middlewares: chain-no-auth@file # Google OAuth 2.0
       ## HTTP Services
       traefik.http.routers.ombi-rtr.service: ombi-svc
       traefik.http.services.ombi-svc.loadbalancer.server.port: ${OMBI_PORT}
@@ -539,7 +539,7 @@ services:
       traefik.http.routers.tautulli-rtr.rule: Host(`tautulli.${DOMAINNAME}`)
       traefik.http.routers.tautulli-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.tautulli-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      traefik.http.routers.tautulli-rtr.middlewares: chain-no-auth@file # Google OAuth 2.0
       ## HTTP Services
       traefik.http.routers.tautulli-rtr.service: tautulli-svc
       traefik.http.services.tautulli-svc.loadbalancer.server.port: ${TAUTULLI_PORT}
@@ -729,6 +729,7 @@ services:
     hostname: docassemble
     container_name: docassemble
     restart: unless-stopped
+    env-file: docassenv.list
     networks:
       - default
       - t2_proxy
