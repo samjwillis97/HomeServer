@@ -729,6 +729,9 @@ services:
     container_name: wireguard
     hostname: wireguard
     restart: unless-stopped
+    networks:
+      - default
+      - t2_proxy
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
