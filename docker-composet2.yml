@@ -634,8 +634,6 @@ services:
     networks:
       - t2_proxy
       - default
-    security_opt:
-      - no-new-privileges: true
     volumes:
       - ${USERDIR}/docker/firefox:/config
       - ${DOWNLOAD_DIR}:/config/downloads
