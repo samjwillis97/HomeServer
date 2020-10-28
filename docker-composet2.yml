@@ -752,16 +752,17 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - SERVERURL=vpn.willishomeserver.com #optional
-      # - INTERNAL_SUBNET=10.13.13.0 #optional
+      - INTERNAL_SUBNET=172.22.0.0/16
       - SERVERPORT=51820 #optional
+      - PEERDNS=8.8.8.8
       # - PEERS=1 #optional
       # - PEERDNS=auto #optional
     volumes:
       - ${USERDIR}/docker/wireguard/config:/config
       - ${USERDIR}/docker/wireguard/modules:/lib/modules
       # - /usr/src:/usr/src
-    ports:
-      - 51820:51820/udp
+    # ports:
+    #   - 51820:51820/udp
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
     labels:
