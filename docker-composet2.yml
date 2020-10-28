@@ -743,7 +743,7 @@ services:
     restart: unless-stopped
     networks:
       t2_proxy:
-        ipv4_address: 172.22.0.100
+        ipv4_address: 172.22.10.1
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -751,8 +751,8 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - SERVERURL=vpn.willishomeserver.com #optional
-      - INTERNAL_SUBNET=172.22.10.0/24
+      - SERVERURL=willishomeserver.com #optional
+      - INTERNAL_SUBNET=172.22.10.0/16
       - SERVERPORT=51820 #optional
       - PEERDNS=8.8.8.8
       - PEERS=5 #optional
@@ -766,7 +766,7 @@ services:
       traefik.enable: true
     ## UDP Routers
       traefik.udp.routers.wireguard-udp.entrypoints: wireguard
-      traefik.udp.routers.wireguard-udp.rule: Host(`vpn.${DOMAINNAME}`)
+      # traefik.udp.routers.wireguard-udp.rule: Host(`vpn.${DOMAINNAME}`)
     ## UDP Services
       traefik.udp.routers.wireguard-udp.service: wireguard-udp-svc
       traefik.udp.services.wireguard-udp-svc.loadbalancer.server.port: 51820
