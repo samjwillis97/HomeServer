@@ -30,6 +30,10 @@ networks:
   t2_proxy:
     external:
       name: t2_proxy
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.22.0.0/16
   default:
     driver: bridge
 
