@@ -752,7 +752,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - SERVERURL=vpn.willishomeserver.com #optional
-      - INTERNAL_SUBNET=172.22.0.0/16
+      - INTERNAL_SUBNET=172.22.10.0/8
       - SERVERPORT=51820 #optional
       - PEERDNS=8.8.8.8
       - PEERS=5 #optional
