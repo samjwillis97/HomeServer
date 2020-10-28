@@ -6,6 +6,7 @@ PUID=1000
 PGID=1000
 TZ=Australia/Sydney
 SERVER_IP=
+PUBLIC_IP=
 #PIHOLE_IP=
 
 ##### DIRECTORY

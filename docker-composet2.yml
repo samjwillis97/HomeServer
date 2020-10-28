@@ -751,7 +751,9 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - SERVERURL=willishomeserver.com #optional
+      - SERVERURL=${PUBLIC_IP} #optional
+        # have to use IP on the app? 27.124.106.233
+        # due to cloudflare proxying
       - INTERNAL_SUBNET=172.22.10.0/16
       - SERVERPORT=51820 #optional
       - PEERDNS=8.8.8.8
