@@ -57,6 +57,7 @@ services:
       - --global.sendAnonymousUsage=true
       - --entryPoints.http.address=:80
       - --entryPoints.https.address=:443
+      - --entryPoints.wireguard.address=:51820/udp
         # Allow these IPs to set the X-Forwarded-* headers - Cloudflare IPs: https://www.cloudflare.com/ips/
       - --entrypoints.https.forwardedHeaders.trustedIPs=173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/12,172.64.0.0/13,131.0.72.0/22
       - --entryPoints.traefik.address=:8080
@@ -84,7 +85,8 @@ services:
       - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.provider=cloudflare
       - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
     networks:
-      - t2_proxy
+      t2_proxy:
+        ipv4_address: 172.22.0.50
     security_opt:
       - no-new-privileges:true
     ports:
@@ -99,6 +101,10 @@ services:
       - target: 8080
         published: 8080
         protocol: tcp
+        mode: host
+      - target: 51820
+        published: 51820
+        protocol: udp
         mode: host
     volumes:
       - $USERDIR/docker/traefik2/rules:/rules 
@@ -724,14 +730,16 @@ services:
 
 ############################# TESTING 
 
+  # https://www.reddit.com/r/Traefik/comments/j7ili5/wireguard_container_behind_traefik_v2/
+  # I think this means you can access wireuard through wireguard://willishomeserver.com?
   wireguard:
     image: linuxserver/wireguard
     container_name: wireguard
     hostname: wireguard
     restart: unless-stopped
     networks:
-      - default
-      - t2_proxy
+      t2_proxy:
+        ipv4_address: 172.22.0.100
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -739,19 +747,27 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      # - SERVERURL=wireguard.domain.com #optional
-      # - SERVERPORT=51820 #optional
+      - SERVERURL=vpn.willishomeserver.com #optional
+      # - INTERNAL_SUBNET=10.13.13.0 #optional
+      - SERVERPORT=51820 #optional
       # - PEERS=1 #optional
       # - PEERDNS=auto #optional
-      # - INTERNAL_SUBNET=10.13.13.0 #optional
-      # - ALLOWEDIPS=192.168.1.0/24,192.168.2.0/24 #optional
     volumes:
       - ${USERDIR}/docker/wireguard/config:/config
       - ${USERDIR}/docker/wireguard/modules:/lib/modules
+      # - /usr/src:/usr/src
     ports:
       - 51820:51820/udp
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
+    labels:
+      traefik.enable: true
+    ## UDP Routers
+      traefik.udp.routers.wireguard-udp.entrypoints: wireguard
+      traefik.udp.routers.wireguard-udp.rule: Host(`vpn.${DOMAINNAME}`)
+    ## UDP Services
+      traefik.udp.routers.wireguard-udp.service: wireguard-udp-svc
+      traefik.udp.services.wireguard-udp-svc.loadbalancer.server.port: 51820
       
 
   docassemble:
