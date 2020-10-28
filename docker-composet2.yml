@@ -634,6 +634,8 @@ services:
     networks:
       - t2_proxy
       - default
+    security_opt:
+      - seccomp=unconfined
     volumes:
       - ${USERDIR}/docker/firefox:/config
       - ${DOWNLOAD_DIR}:/config/downloads
