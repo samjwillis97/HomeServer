@@ -34,13 +34,6 @@ networks:
       driver: default
       config:
         - subnet: 172.22.0.0/16
-  wireguard:
-    external:
-      name: wireguard
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.50.0.0/24
   default:
     driver: bridge
 
@@ -96,8 +89,8 @@ services:
       - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.provider=cloudflare
       - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
     networks:
-      - t2_proxy
-      - wireguard
+      t2_proxy:
+        ipv4_address: 172.22.0.50
     security_opt:
       - no-new-privileges:true
     ports:
@@ -749,8 +742,8 @@ services:
     hostname: wireguard
     restart: unless-stopped
     networks:
-      wireguard:
-        ipv4_address: 172.50.0.1
+      t2_proxy:
+        ipv4_address: 172.22.10.1
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -761,7 +754,7 @@ services:
       - SERVERURL=${PUBLIC_IP} #optional
         # have to use IP on the app? 27.124.106.233
         # due to cloudflare proxying
-      - INTERNAL_SUBNET=172.50.0.0/16
+      - INTERNAL_SUBNET=172.22.10.0/16
       - SERVERPORT=51820 #optional
       - PEERDNS=8.8.8.8
       - PEERS=5 #optional
