@@ -52,6 +52,7 @@ services:
 ########################### FRONTENDS
 
 ## Traefik v2 - Reverse Proxy
+# ip route add 172.22.10.0/24 via 172.22.10.1
   traefik:
     image: traefik:chevrotin # v2.2
     container_name: traefik
