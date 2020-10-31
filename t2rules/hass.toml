@@ -1,0 +1,15 @@
+[http.routers]
+  [http.routers.hass-rtr]
+      entryPoints = ["https"]
+      rule = "Host(`hass.willishomeserver.com`)"
+      service = "hass-svc"
+      middlewares = ["chain-oauth"]
+      [http.routers.hass-rtr.tls]
+        certresolver = "dns-cloudflare"
+
+[http.services]
+  [http.services.hass-svc]
+    [http.services.hass-svc.loadBalancer]
+      passHostHeader = true
+      [[http.services.hass-svc.loadBalancer.servers]]
+        url = "http://172.22.10.2:8123" # or whatever your external host's IP:port is
