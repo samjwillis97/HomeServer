@@ -737,6 +737,33 @@ services:
 
 ############################# TESTING 
 
+  node-red:
+    image: nodered/node-red
+    container_name: node-red
+    hostname: node-red
+    restart: unless-stopped
+    networks:
+      - t2_proxy
+    ports:
+      - 1880:1880
+    volumes:
+      - ${USERDIR}/docker/node-red:/data
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    labels:
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.nodered-rtr.entrypoints: https
+      traefik.http.routers.nodered-rtr.rule: Host(`node.${DOMAINNAME}`)
+      traefik.http.routers.nodered-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.nodered-rtr.middlewares: chain-no-auth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.nodered-rtr.service: nodered-svc
+      traefik.http.services.nodered-svc.loadbalancer.server.port: 1880
+
   # https://www.reddit.com/r/Traefik/comments/j7ili5/wireguard_container_behind_traefik_v2/
   # I think this means you can access wireuard through wireguard://willishomeserver.com?
   wireguard:
