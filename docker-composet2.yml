@@ -759,7 +759,7 @@ services:
       traefik.http.routers.nodered-rtr.rule: Host(`node.${DOMAINNAME}`)
       traefik.http.routers.nodered-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.nodered-rtr.middlewares: chain-no-auth@file # Google OAuth 2.0
+      traefik.http.routers.nodered-rtr.middlewares: chain-basic-auth@file # Google OAuth 2.0
       ## HTTP Services
       traefik.http.routers.nodered-rtr.service: nodered-svc
       traefik.http.services.nodered-svc.loadbalancer.server.port: 1880
