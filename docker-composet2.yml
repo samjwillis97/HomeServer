@@ -84,7 +84,6 @@ services:
       - --providers.docker.network=t2_proxy
       - --providers.docker.swarmMode=false
       - --providers.file.directory=/rules # Load dynamic configuration from one or more .toml or .yml files in a directory.
-#      - --providers.file.filename=/path/to/file # Load dynamic configuration from a file.
       - --providers.file.watch=true # Only works on top level files in the rules folder
       - --certificatesResolvers.dns-cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory # LetsEncrypt Staging Server - uncomment when testing
       - --certificatesResolvers.dns-cloudflare.acme.email=${CLOUDFLARE_EMAIL}
@@ -136,8 +135,6 @@ services:
       # - "traefik.http.routers.traefik-rtr.tls.certresolver=dns-cloudflare" # Comment out this line after first run of traefik to force the use of wildcard certs
       - "traefik.http.routers.traefik-rtr.tls.domains[0].main=${DOMAINNAME}"
       - "traefik.http.routers.traefik-rtr.tls.domains[0].sans=*.${DOMAINNAME}"
-#      - "traefik.http.routers.traefik-rtr.tls.domains[1].main=$SECONDDOMAINNAME" # Pulls main cert for second domain
-#      - "traefik.http.routers.traefik-rtr.tls.domains[1].sans=*.$SECONDDOMAINNAME" # Pulls wildcard cert for second domain
       ## Services - API
       - "traefik.http.routers.traefik-rtr.service=api@internal"
       ## Middlewares
@@ -711,7 +708,6 @@ services:
     container_name: glances
     restart: unless-stopped
     privileged: true
-#    network_mode: host
     networks:
       - t2_proxy
     ports:
@@ -721,7 +717,6 @@ services:
       - ${USERDIR}/docker/glances:/glances/conf # Use this if you want to add a glances.conf file
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
-#      GLANCES_OPT: "-C /glances/conf/glances.conf --quiet --export influxdb"
       GLANCES_OPT: "-w"
     labels:
       traefik.enable: true

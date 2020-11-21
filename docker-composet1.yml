@@ -173,43 +173,43 @@ services:
       traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
       traefik.frontend.auth.forward.trustForwardHeader: "true"
 
-  organizr:
-    image: organizrtools/organizr-v2
-    container_name: organizr
-    hostname: organizr
-    restart: unless-stopped
-    networks:
-      - traefik_proxy
-    environment:
-      PUID: ${PUID}
-      PGID: ${PGID}
-      TZ: ${TZ}
-    volumes:
-      - ${USERDIR}/docker/organizr:/config
-    ports:
-      - "${ORGANIZR_PORT}:80"
-    labels:
-      traefik.enable: "true"
-      traefik.backend: organizr
-      traefik.protocol: http
-      traefik.port: 80
-      traefik.frontend.rule: Host:dash.${DOMAINNAME}
-      traefik.frontend.headers.SSLHost: dash.${DOMAINNAME}
-      traefik.docker.network: traefik_proxy
-      traefik.frontend.passHostHeader: "true"
-      traefik.frontend.headers.SSLForceHost: "true"
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.headers.browserXSSFilter: "true"
-      traefik.frontend.headers.contentTypeNosniff: "true"
-      traefik.frontend.headers.forceSTSHeader: "true"
-      traefik.frontend.headers.STSSeconds: 315360000
-      traefik.frontend.headers.STSIncludeSubdomains: "true"
-      traefik.frontend.headers.STSPreload: "true"
-      traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
-      traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
-      traefik.frontend.auth.forward.address: "http://oauth:4181"
-      traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
-      traefik.frontend.auth.forward.trustForwardHeader: "true"
+  # organizr:
+  #   image: organizrtools/organizr-v2
+  #   container_name: organizr
+  #   hostname: organizr
+  #   restart: unless-stopped
+  #   networks:
+  #     - traefik_proxy
+  #   environment:
+  #     PUID: ${PUID}
+  #     PGID: ${PGID}
+  #     TZ: ${TZ}
+  #   volumes:
+  #     - ${USERDIR}/docker/organizr:/config
+  #   ports:
+  #     - "${ORGANIZR_PORT}:80"
+  #   labels:
+  #     traefik.enable: "true"
+  #     traefik.backend: organizr
+  #     traefik.protocol: http
+  #     traefik.port: 80
+  #     traefik.frontend.rule: Host:dash.${DOMAINNAME}
+  #     traefik.frontend.headers.SSLHost: dash.${DOMAINNAME}
+  #     traefik.docker.network: traefik_proxy
+  #     traefik.frontend.passHostHeader: "true"
+  #     traefik.frontend.headers.SSLForceHost: "true"
+  #     traefik.frontend.headers.SSLRedirect: "true"
+  #     traefik.frontend.headers.browserXSSFilter: "true"
+  #     traefik.frontend.headers.contentTypeNosniff: "true"
+  #     traefik.frontend.headers.forceSTSHeader: "true"
+  #     traefik.frontend.headers.STSSeconds: 315360000
+  #     traefik.frontend.headers.STSIncludeSubdomains: "true"
+  #     traefik.frontend.headers.STSPreload: "true"
+  #     traefik.frontend.headers.customResponseHeaders: X-Robots-Tag:noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
+  #     traefik.frontend.headers.customFrameOptionsValue: 'allow-from https:${DOMAINNAME}'
+  #     traefik.frontend.auth.forward.address: "http://oauth:4181"
+  #     traefik.frontend.auth.forward.authResponseHeaders: X-Forwarded-User
+  #     traefik.frontend.auth.forward.trustForwardHeader: "true"
 
 ## Autoindex - Simple Directory Index
   autoindex:
