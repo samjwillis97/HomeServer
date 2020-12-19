@@ -627,40 +627,40 @@ services:
 
 ############################# UTILITIES
 
-  # firefox:
-  #   image: jlesage/firefox:latest
-  #   container_name: firefox
-  #   restart: unless-stopped
-  #   networks:
-  #     - t2_proxy
-  #     - default
-  #   security_opt:
-  #     - seccomp=unconfined
-  #   volumes:
-  #     - ${USERDIR}/docker/firefox:/config
-  #     - ${DOWNLOAD_DIR}:/config/downloads
-  #     - /dev/shm:/dev/shm
-  #     - ${USERDIR}/docker/shared:/shared
-  #   environment:
-  #     USER_ID: ${PUID}
-  #     GROUP_ID: ${PGID}
-  #     TZ: ${TZ}
-  #     UMASK: 022
-  #     KEEP_APP_RUNNING: 1
-  #     CLEAN_TMP_DIR: 1
-  #     DISPLAY_WIDTH: 1600
-  #     DISPLAY_HEIGHT: 900
-  #   labels:
-  #     traefik.enable: true
-  #     ## HTTP Routers
-  #     traefik.http.routers.firefox-rtr.entrypoints: https
-  #     traefik.http.routers.firefox-rtr.rule: Host(`firefox.${DOMAINNAME}`)
-  #     traefik.http.routers.firefox-rtr.tls: true
-  #     ## Middlewares
-  #     traefik.http.routers.firefox-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
-  #     ## HTTP Services
-  #     traefik.http.routers.firefox-rtr.service: firefox-svc
-  #     traefik.http.services.firefox-svc.loadbalancer.server.port: 5800
+  firefox:
+    image: jlesage/firefox:latest
+    container_name: firefox
+    restart: unless-stopped
+    networks:
+      - t2_proxy
+      - default
+    security_opt:
+      - seccomp=unconfined
+    volumes:
+      - ${USERDIR}/docker/firefox:/config
+      - ${DOWNLOAD_DIR}:/config/downloads
+      - /dev/shm:/dev/shm
+      - ${USERDIR}/docker/shared:/shared
+    environment:
+      USER_ID: ${PUID}
+      GROUP_ID: ${PGID}
+      TZ: ${TZ}
+      UMASK: 022
+      KEEP_APP_RUNNING: 1
+      CLEAN_TMP_DIR: 1
+      DISPLAY_WIDTH: 1600
+      DISPLAY_HEIGHT: 900
+    labels:
+      traefik.enable: true
+      ## HTTP Routers
+      traefik.http.routers.firefox-rtr.entrypoints: https
+      traefik.http.routers.firefox-rtr.rule: Host(`firefox.${DOMAINNAME}`)
+      traefik.http.routers.firefox-rtr.tls: true
+      ## Middlewares
+      traefik.http.routers.firefox-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+      ## HTTP Services
+      traefik.http.routers.firefox-rtr.service: firefox-svc
+      traefik.http.services.firefox-svc.loadbalancer.server.port: 5800
 
 # Guacamole Daemon
   guacd:
