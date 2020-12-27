@@ -732,32 +732,32 @@ services:
 
 ############################# TESTING 
 
-  node-red:
-    image: nodered/node-red
-    container_name: node-red
-    hostname: node-red
-    restart: unless-stopped
-    networks:
-      - t2_proxy
-    ports:
-      - 1880:1880
-    volumes:
-      - ${USERDIR}/docker/node-red:/data
-    environment:
-      TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
-    labels:
-      traefik.enable: true
-      ## HTTP Routers
-      traefik.http.routers.nodered-rtr.entrypoints: https
-      traefik.http.routers.nodered-rtr.rule: Host(`node.${DOMAINNAME}`)
-      traefik.http.routers.nodered-rtr.tls: true
-      ## Middlewares
-      traefik.http.routers.nodered-rtr.middlewares: chain-basic-auth@file # Google OAuth 2.0
-      ## HTTP Services
-      traefik.http.routers.nodered-rtr.service: nodered-svc
-      traefik.http.services.nodered-svc.loadbalancer.server.port: 1880
+  # node-red:
+  #   image: nodered/node-red
+  #   container_name: node-red
+  #   hostname: node-red
+  #   restart: unless-stopped
+  #   networks:
+  #     - t2_proxy
+  #   ports:
+  #     - 1880:1880
+  #   volumes:
+  #     - ${USERDIR}/docker/node-red:/data
+  #   environment:
+  #     TZ: ${TZ}
+  #     PUID: ${PUID}
+  #     PGID: ${PGID}
+  #   labels:
+  #     traefik.enable: true
+  #     ## HTTP Routers
+  #     traefik.http.routers.nodered-rtr.entrypoints: https
+  #     traefik.http.routers.nodered-rtr.rule: Host(`node.${DOMAINNAME}`)
+  #     traefik.http.routers.nodered-rtr.tls: true
+  #     ## Middlewares
+  #     traefik.http.routers.nodered-rtr.middlewares: chain-basic-auth@file # Google OAuth 2.0
+  #     ## HTTP Services
+  #     traefik.http.routers.nodered-rtr.service: nodered-svc
+  #     traefik.http.services.nodered-svc.loadbalancer.server.port: 1880
 
   # https://www.reddit.com/r/Traefik/comments/j7ili5/wireguard_container_behind_traefik_v2/
   # I think this means you can access wireuard through wireguard://willishomeserver.com?
@@ -798,36 +798,36 @@ services:
       traefik.udp.services.wireguard-udp-svc.loadbalancer.server.port: 51820
       
 
-  docassemble:
-    image: jhpyle/docassemble
-    hostname: docassemble
-    container_name: docassemble
-    restart: unless-stopped
-    env_file:
-      - docassenv.list
-    networks:
-      - default
-      - t2_proxy
-    ports:
-      - 3856:80
-      - 3756:443
-    volumes:
-      - ${USERDIR}/docker/docassemble:/usr/share/docassemble/backup
-    environment:
-      TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
-    labels:
-      traefik.enable: true
-      ## HTTP Routers
-      traefik.http.routers.doc-rtr.entrypoints: https
-      traefik.http.routers.doc-rtr.rule: Host(`docs.${DOMAINNAME}`)
-      traefik.http.routers.doc-rtr.tls: true
-      ## Middlewares
-      traefik.http.routers.doc-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
-      ## HTTP Services
-      traefik.http.routers.doc-rtr.service: doc-svc
-      traefik.http.services.doc-svc.loadbalancer.server.port: 80
+  # docassemble:
+  #   image: jhpyle/docassemble
+  #   hostname: docassemble
+  #   container_name: docassemble
+  #   restart: unless-stopped
+  #   env_file:
+  #     - docassenv.list
+  #   networks:
+  #     - default
+  #     - t2_proxy
+  #   ports:
+  #     - 3856:80
+  #     - 3756:443
+  #   volumes:
+  #     - ${USERDIR}/docker/docassemble:/usr/share/docassemble/backup
+  #   environment:
+  #     TZ: ${TZ}
+  #     PUID: ${PUID}
+  #     PGID: ${PGID}
+  #   labels:
+  #     traefik.enable: true
+  #     ## HTTP Routers
+  #     traefik.http.routers.doc-rtr.entrypoints: https
+  #     traefik.http.routers.doc-rtr.rule: Host(`docs.${DOMAINNAME}`)
+  #     traefik.http.routers.doc-rtr.tls: true
+  #     ## Middlewares
+  #     traefik.http.routers.doc-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+  #     ## HTTP Services
+  #     traefik.http.routers.doc-rtr.service: doc-svc
+  #     traefik.http.services.doc-svc.loadbalancer.server.port: 80
 
   grafana:
     image: grafana/grafana
@@ -859,104 +859,104 @@ services:
       traefik.http.services.grafana-svc.loadbalancer.server.port: 3000
 
   # https://devopscube.com/monitor-linux-servers-prometheus-node-exporter/
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    hostname: prometheus
-    restart: unless-stopped
-    networks:
-      - default
-      - t2_proxy
-    ports:
-      - 9090:9090
-    volumes:
-      - ${USERDIR}/docker/prometheus:/etc/prometheus
-    environment:
-      TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
-    labels:
-      traefik.enable: true
-      ## HTTP Routers
-      traefik.http.routers.prometheus-rtr.entrypoints: https
-      traefik.http.routers.prometheus-rtr.rule: Host(`prometheus.${DOMAINNAME}`)
-      traefik.http.routers.prometheus-rtr.tls: true
-      ## Middlewares
-      traefik.http.routers.prometheus-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
-      ## HTTP Services
-      traefik.http.routers.prometheus-rtr.service: prometheus-svc
-      traefik.http.services.prometheus-svc.loadbalancer.server.port: 9090
+  # prometheus:
+  #   image: prom/prometheus
+  #   container_name: prometheus
+  #   hostname: prometheus
+  #   restart: unless-stopped
+  #   networks:
+  #     - default
+  #     - t2_proxy
+  #   ports:
+  #     - 9090:9090
+  #   volumes:
+  #     - ${USERDIR}/docker/prometheus:/etc/prometheus
+  #   environment:
+  #     TZ: ${TZ}
+  #     PUID: ${PUID}
+  #     PGID: ${PGID}
+  #   labels:
+  #     traefik.enable: true
+  #     ## HTTP Routers
+  #     traefik.http.routers.prometheus-rtr.entrypoints: https
+  #     traefik.http.routers.prometheus-rtr.rule: Host(`prometheus.${DOMAINNAME}`)
+  #     traefik.http.routers.prometheus-rtr.tls: true
+  #     ## Middlewares
+  #     traefik.http.routers.prometheus-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+  #     ## HTTP Services
+  #     traefik.http.routers.prometheus-rtr.service: prometheus-svc
+  #     traefik.http.services.prometheus-svc.loadbalancer.server.port: 9090
 
-  grocy:
-    image: linuxserver/grocy
-    container_name: grocy
-    hostname: grocy
-    restart: unless-stopped
-    networks:
-      - default
-      - t2_proxy
-    ports:
-      - 9283:80
-    volumes:
-      - ${USERDIR}/docker/grocy:/config
-    environment:
-      TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
-    labels:
-      traefik.enable: true
-      ## HTTP Routers
-      traefik.http.routers.grocy-rtr.entrypoints: https
-      traefik.http.routers.grocy-rtr.rule: Host(`grocy.${DOMAINNAME}`)
-      traefik.http.routers.grocy-rtr.tls: true
-      ## Middlewares
-      # traefik.http.routers.grocy-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
-      ## HTTP Services
-      traefik.http.routers.grocy-rtr.service: grocy-svc
-      traefik.http.services.grocy-svc.loadbalancer.server.port: 80
+  # grocy:
+  #   image: linuxserver/grocy
+  #   container_name: grocy
+  #   hostname: grocy
+  #   restart: unless-stopped
+  #   networks:
+  #     - default
+  #     - t2_proxy
+  #   ports:
+  #     - 9283:80
+  #   volumes:
+  #     - ${USERDIR}/docker/grocy:/config
+  #   environment:
+  #     TZ: ${TZ}
+  #     PUID: ${PUID}
+  #     PGID: ${PGID}
+  #   labels:
+  #     traefik.enable: true
+  #     ## HTTP Routers
+  #     traefik.http.routers.grocy-rtr.entrypoints: https
+  #     traefik.http.routers.grocy-rtr.rule: Host(`grocy.${DOMAINNAME}`)
+  #     traefik.http.routers.grocy-rtr.tls: true
+  #     ## Middlewares
+  #     # traefik.http.routers.grocy-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
+  #     ## HTTP Services
+  #     traefik.http.routers.grocy-rtr.service: grocy-svc
+      # traefik.http.services.grocy-svc.loadbalancer.server.port: 80
 
-  zabbix-proxy:
-    image: zabbix/zabbix-proxy-sqlite3:ubuntu-5.0.4
-    hostname: zabbix-proxy
-    container_name: zabbix-proxy
-    restart: unless-stopped
-    networks:
-      - default
-      - t2_proxy
-    ports:
-      - 10051:10051
-    volumes:
-      - ${USERDIR}/docker/zabbix/modules:/var/lib/zabbix/modules
-    environment:
-      TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
-      ZBX_HOSTNAME: SJW-Ubuntu-VM-Proxy
-      ZBX_SERVER_HOST: ubnt.theimagefactory.com.au
-      ZBX_SERVER_PORT: 10051
-      ZBX_PROXYMODE: 0
+  # zabbix-proxy:
+  #   image: zabbix/zabbix-proxy-sqlite3:ubuntu-5.0.4
+  #   hostname: zabbix-proxy
+  #   container_name: zabbix-proxy
+  #   restart: unless-stopped
+  #   networks:
+  #     - default
+  #     - t2_proxy
+  #   ports:
+  #     - 10051:10051
+  #   volumes:
+  #     - ${USERDIR}/docker/zabbix/modules:/var/lib/zabbix/modules
+  #   environment:
+  #     TZ: ${TZ}
+  #     PUID: ${PUID}
+  #     PGID: ${PGID}
+  #     ZBX_HOSTNAME: SJW-Ubuntu-VM-Proxy
+  #     ZBX_SERVER_HOST: ubnt.theimagefactory.com.au
+  #     ZBX_SERVER_PORT: 10051
+  #     ZBX_PROXYMODE: 0
 
-  zabbix-agent:
-    image: zabbix/zabbix-agent:ubuntu-5.0.4
-    hostname: zabbix-agent
-    container_name: zabbix-agent
-    restart: unless-stopped
-    networks:
-      - default
-      - t2_proxy
-    ports:
-      - 10050:10050
-    volumes:
-      - ${USERDIR}/docker/zabbix/modules:/var/lib/zabbix/modules
-    environment:
-      TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
-      ZBX_HOSTNAME: SJW-Ubuntu-VM-Agent
-      ZBX_SERVER_HOST: 10.1.1.141
-      # ZBX_PASSIVE_ALLOW: true
-      # ZBX_PASSIVESERVERS: localhost:10051
-      # ZBX_ACTIVE_ALLOW: true
+  # zabbix-agent:
+  #   image: zabbix/zabbix-agent:ubuntu-5.0.4
+  #   hostname: zabbix-agent
+  #   container_name: zabbix-agent
+  #   restart: unless-stopped
+  #   networks:
+  #     - default
+  #     - t2_proxy
+  #   ports:
+  #     - 10050:10050
+  #   volumes:
+  #     - ${USERDIR}/docker/zabbix/modules:/var/lib/zabbix/modules
+  #   environment:
+  #     TZ: ${TZ}
+  #     PUID: ${PUID}
+  #     PGID: ${PGID}
+  #     ZBX_HOSTNAME: SJW-Ubuntu-VM-Agent
+  #     ZBX_SERVER_HOST: 10.1.1.141
+  #     # ZBX_PASSIVE_ALLOW: true
+  #     # ZBX_PASSIVESERVERS: localhost:10051
+  #     # ZBX_ACTIVE_ALLOW: true
       # ZBX_ACTIVESERVERS: localhost:10051
 
 ############################# MAINTENANCE
