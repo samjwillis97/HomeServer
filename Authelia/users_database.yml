@@ -1,8 +1,0 @@
-users:
-  username:
-    displayname: "Sam Willis"
-    password: "HASHED_PASSWORD"
-    email: samjwillis97@gmail.com
-    groups:
-      - admins
-      - dev
