@@ -1,9 +1,10 @@
 #!/bin/bash
 # attempt to automate creation of server, should be run as sudo
-if [ ! -f .env ]
-then
-    export $(cat .env | sed 's/#.*//g' | xargs)
-fi
+# if [ ! -f .env ]
+# then
+    # export $(cat .env | sed 's/#.*//g' | xargs)
+# fi
+set -o allexport; source ./.env; set +o allexport
 
 # CONSTANTS
 RED='\033[0;31m'
@@ -26,7 +27,7 @@ fi
 # docker pre-reqs
 echo -e "${CYAN}Installing Docker Pre Reqs${NC}"
 
-apt-get install apt-transport-https ca-certificates curl software-properties-common
+apt-get install apt-transport-https ca-certificates curl software-properties-common -y
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
