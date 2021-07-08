@@ -104,6 +104,7 @@ touch ~/docker/appdata/traefik2/traefik.log
   - MOVIE_DIR
 - Domain
   - DOMAINNAME
+  - CLOUDFLARE_EMAIL
 - Databases
   - MARIA_HOST
   - MARIA_PORT
