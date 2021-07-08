@@ -5,43 +5,62 @@ then
     export $(cat .env | sed 's/#.*//g' | xargs)
 fi
 
-#VARIABLES
-echo "Main user:"
-echo $USER
+# CONSTANTS
+RED='\033[0;31m'
+CYAN='\033[1;36m'
+NC='\033[0m' # No Color
 
-echo "Directory for docker:"
-echo $DOCKER_DIR
+
+#VARIABLE CHECKS
+if [ -z "$DOCKER_DIR" ]
+then
+      echo -e "${RED}\$DOCKER_DIR not set${NC}"
+      exit 1
+fi
+if [ -z "$SECRETS_DIR" ]
+then
+      echo -e "${RED}\$SECRETS_DIR not set${NC}"
+      exit 1
+fi
 
 # docker pre-reqs
+echo -e "${CYAN}Installing Docker Pre Reqs${NC}"
+
 apt-get install apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+
+echo -e "${CYAN}Updating${NC}"
+
 apt-get update -y
 
 # installing docker
+echo -e "${CYAN}Installing Docker CE${NC}"
+
 apt-get install docker-ce -y
 
 # installing docker-compose
+echo -e "${CYAN}Installing Docker Compose${NC}"
+
 curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
 # setting up directories and permissions
-usermod -aG docker ${USER}
-mkdir ${DOCKER_DIR}
-touch ${DOCKER_DIR}/.env
-cp ./environment ${DOCKER_DIR}/.env
-# FILL OUT  
-sudo chmod -R 775 ${DOCKER_DIR}
-mkdir ${DOCKER_DIR}/shared
-mkdir -p ${DOCKER_DIR}/traefik/acme
-touch ${DOCKER_DIR}/traefik/acme/acme.json
-chmod 600 ${DOCKER_DIR}/traefik/acme/acme.json
-# FILL OUT
-touch ${DOCKER_DIR}/traefik/rules.toml
-# FILL OUT
-docker create network traefik_proxy
-# FORWARD PORTS 8 and 443 to Server
-touch ${DOCKER_DIR}/docker-compose.yml
-cp ./docker-composet1.yml ${DOCKER_DIR}/docker-compose.yml
-# copy compose file
-# docker-compose -f ~/docker/docker-compose.yml up -d
+echo -e "${CYAN}Setting up Directories${NC}"
+
+usermod -aG docker $USER
+mkdir $DOCKER_DIR
+setfacl -Rdm g:docker:rwx $DOCKER_DIR
+chmod -R 775 $DOCKER_DIR
+cp ./.env $DOCKER_DIR/.env
+cp ./docker-socket-traefik.yml $DOCKER_DIR/docker-compose.yml
+mkdir $SECRETS_DIR
+touch $SECRETS_DIR/httpassword
+mkdir -p $DOCKER_DIR/appdata/traefik2/acme
+touch $DOCKER_DIR/appdata/traefik2/acme/acme.json
+chmod 600 $DOCKER_DIR/appdata/traefik2/acme/acme.json
+touch $DOCKER_DIR/appdata/traefik2/traefik.logs
+cp -r ./traefik/rules $DOCKER_DIR/appdata/traefik2/
+
+echo -e "${CYAN}Success!${NC}"

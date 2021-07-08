@@ -3,6 +3,9 @@ Ubuntu Homeserver Setup files and guide
 
 ## Initial Setup Guide
 
+1. Create .env File
+2. Run CreateServer.sh as sudo
+
 ```shell
 # Setup Server
 adduser USER
