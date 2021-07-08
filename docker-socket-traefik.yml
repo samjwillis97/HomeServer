@@ -50,14 +50,15 @@ services:
         # Allow these IPs to set the X-Forwarded-* headers - Cloudflare IPs: https://www.cloudflare.com/ips/
       - --entrypoints.https.forwardedHeaders.trustedIPs=173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/12,172.64.0.0/13,131.0.72.0/22
       - --entryPoints.traefik.address=:8080
+      # - --entryPoints.ping.address=:8081
       - --api=true
-      # - --api.insecure=true
       - --api.dashboard=true
+      # - --api.insecure=true
+      # - --serversTransport.insecureSkipVerify=true
       # - --ping=true
       # - --pilot.token=$TRAEFIK_PILOT_TOKEN
-      # - --serversTransport.insecureSkipVerify=true
       - --log=true
-      - --log.level=WARN # (Default: error) DEBUG, INFO, WARN, ERROR, FATAL, PANIC
+      - --log.level=DEBUG # (Default: error) DEBUG, INFO, WARN, ERROR, FATAL, PANIC
       - --accessLog=true
       - --accessLog.filePath=/traefik.log
       - --accessLog.bufferingSize=100 # Configuring a buffer of 100 lines
@@ -114,8 +115,8 @@ services:
       - $DOCKER_DIR/appdata/traefik2/acme/acme.json:/acme.json 
       - $DOCKER_DIR/appdata/traefik2/traefik.log:/traefik.log
     environment:
-      - CF_API_EMAIL=/run/secrets/cloudflare_email
-      - CF_API_KEY=/run/secrets/cloudflare_api_key
+      - CF_API_EMAIL_FILE=/run/secrets/cloudflare_email
+      - CF_API_KEY_FILE=/run/secrets/cloudflare_api_key
       - HTPASSWD_FILE=/run/secrets/httpassword
     secrets:
       - cloudflare_email
