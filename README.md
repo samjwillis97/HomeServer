@@ -92,8 +92,9 @@ touch ~/docker/appdata/traefik2/traefik.log
   - SERVER_IP
   - PUBLIC_IP
 - Directories
+  - USER_DIR
   - DOCKER_DIR
-  - INDEX_DIR
+  - SECRETS_DIR
   - DOWNLOAD_DIR
   - MEDIA_DIR
   - TV_DIR
@@ -109,6 +110,7 @@ touch ~/docker/appdata/traefik2/traefik.log
 - Ports
   - TRAEFIK_DASH_PORT
   - PORTAINER_PORT
+  - DELUGE_PORT
   - JACKETT_PORT
   - RADARR_PORT
   - SONARR_PORT

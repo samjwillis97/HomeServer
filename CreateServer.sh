@@ -1,21 +1,25 @@
 #!/bin/bash
 # attempt to automate creation of server, should be run as sudo
+if [ ! -f .env ]
+then
+    export $(cat .env | sed 's/#.*//g' | xargs)
+fi
 
 #VARIABLES
 echo "Main user:"
-read USER
+echo $USER
 
 echo "Directory for docker:"
-read DOCKER_DIR
+echo $DOCKER_DIR
 
 # docker pre-reqs
 apt-get install apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-apt-get update
+apt-get update -y
 
 # installing docker
-apt-get install docker-ce
+apt-get install docker-ce -y
 
 # installing docker-compose
 curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose

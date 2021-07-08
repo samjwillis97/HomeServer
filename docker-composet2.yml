@@ -81,6 +81,8 @@ services:
     image: traefik:livarot # v2.2
     container_name: traefik
     restart: always
+    depends_on:
+      - "socket-proxy"
     command: # CLI arguments
       - --global.checkNewVersion=true
       - --global.sendAnonymousUsage=true
