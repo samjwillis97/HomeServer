@@ -20,13 +20,13 @@ networks:
 ########################### SERVICES
 secrets:
   httpassword:
-    file: $DOCKERDIR/secrets/httpassword
+    file: $SECRETS_DIR/httpassword
   cloudflare_email:
-    file: $DOCKERDIR/secrets/cloudflare_email
+    file: $SECRETS_DIR/cloudflare_email
   cloudflare_api_key:
-    file: $DOCKERDIR/secrets/cloudflare_api_key
+    file: $SECRETS_DIR/cloudflare_api_key
   cloudflare_api_token:
-    file: $DOCKERDIR/secrets/cloudflare_api_token
+    file: $SECRETS_DIR/cloudflare_api_token
 
 ########################### SERVICES
 services:
@@ -131,7 +131,7 @@ services:
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
       # HTTP Routers
       - "traefik.http.routers.traefik-rtr.entrypoints=https"
-      - "traefik.http.routers.traefik-rtr.rule=Host(`traefik.$DOMAINNAME0`)"
+      - "traefik.http.routers.traefik-rtr.rule=Host(`traefik.$DOMAINNAME`)"
       ## Services - API
       - "traefik.http.routers.traefik-rtr.service=api@internal"
       ## Healthcheck/ping

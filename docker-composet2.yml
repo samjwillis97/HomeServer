@@ -45,29 +45,29 @@ networks:
 ########################### SERVICES
 secrets:
   httpassword:
-    file: $DOCKERDIR/secrets/httpassword
+    file: $SECRETS_DIR/httpassword
   cloudflare_email:
-    file: $DOCKERDIR/secrets/cloudflare_email
+    file: $SECRETS_DIR/cloudflare_email
   cloudflare_api_key:
-    file: $DOCKERDIR/secrets/cloudflare_api_key
+    file: $SECRETS_DIR/cloudflare_api_key
   cloudflare_api_token:
-    file: $DOCKERDIR/secrets/cloudflare_api_token
+    file: $SECRETS_DIR/cloudflare_api_token
   oauth_secret:
-    file: $DOCKERDIR/secrets/oauth_secret
+    file: $SECRETS_DIR/oauth_secret
   google_client_secret:
-    file: $DOCKERDIR/secrets/google_client_secret
+    file: $SECRETS_DIR/google_client_secret
   google_client_id:
-    file: $DOCKERDIR/secrets/google_client_id
+    file: $SECRETS_DIR/google_client_id
   my_email:
-    file: $DOCKERDIR/secrets/my_email
+    file: $SECRETS_DIR/my_email
   plex_claim:
-    file: $DOCKERDIR/secrets/plex_claim
+    file: $SECRETS_DIR/plex_claim
   traefik_pilot_token:
-    file: $DOCKERDIR/secrets/traefik_pilot_token
+    file: $SECRETS_DIR/traefik_pilot_token
   mariadb_root_password:
-    file: $DOCKERDIR/secrets/maria_root_password
+    file: $SECRETS_DIR/maria_root_password
   influxdb_root_password:
-    file: $DOCKERDIR/secrets/influxdb_root_password
+    file: $SECRETS_DIR/influxdb_root_password
 
 ########################### SERVICES
 services:
@@ -172,7 +172,7 @@ services:
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
       # HTTP Routers
       - "traefik.http.routers.traefik-rtr.entrypoints=https"
-      - "traefik.http.routers.traefik-rtr.rule=Host(`traefik.$DOMAINNAME0`)"
+      - "traefik.http.routers.traefik-rtr.rule=Host(`traefik.$DOMAINNAME`)"
       ## Services - API
       - "traefik.http.routers.traefik-rtr.service=api@internal"
       ## Healthcheck/ping
