@@ -61,7 +61,7 @@ touch $SECRETS_DIR/httpassword
 mkdir -p $DOCKER_DIR/appdata/traefik2/acme
 touch $DOCKER_DIR/appdata/traefik2/acme/acme.json
 chmod 600 $DOCKER_DIR/appdata/traefik2/acme/acme.json
-touch $DOCKER_DIR/appdata/traefik2/traefik.logs
-cp -r ./traefik/rules $DOCKER_DIR/appdata/traefik2/
+touch $DOCKER_DIR/appdata/traefik2/traefik.log
+# cp -r ./traefik/rules $DOCKER_DIR/appdata/traefik2/
 
 echo -e "${CYAN}Success!${NC}"
