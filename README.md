@@ -94,6 +94,7 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Extract LetsEncrypt Certificates
 - CF companion :heavy_check_mark:
   - Automatic CNAME DNS Creation on Cloudflare
+- CF DDNS
 
 ## Environment Variables
 
