@@ -1,10 +1,19 @@
 # HomeServer
 Ubuntu Homeserver Setup files and guide
 
+See: 
+
+- https://www.smarthomebeginner.com/google-oauth-with-traefik-2-docker/
+- https://www.smarthomebeginner.com/traefik-2-docker-tutorial/#Traefik_2_Setup
+
 ## Initial Setup Guide
 
 1. Create .env File
 2. Run CreateServer.sh as sudo
+3. Create Docker-Compose with only networks and socket-proxy, ensure working
+4. Add Traefik with Line un-commented for testing, ensure working
+5. Remove old acme.json create new one with 600 perms, re-comment line
+6. Add cloudflare 
 
 ```shell
 # Setup Server
@@ -41,13 +50,13 @@ touch ~/docker/appdata/traefik2/traefik.log
 
 ## Required Containers
 
-- Traefik v2
+- Traefik v2 :heavy_check_mark:
   - Reverse Proxy + Lets Encrypt
-- Docker Socket Proxy
+- Docker Socket Proxy :heavy_check_mark:
   - For improved security of Docker
-- Google Oauth 
+- Google Oauth :heavy_check_mark:
   - Google Two Factor Auth
-- Portainer
+- Portainer :heavy_check_mark:
   - Container Management WebUI
 - MariaDB
   - MySQL Database
@@ -105,11 +114,17 @@ touch ~/docker/appdata/traefik2/traefik.log
 - Domain
   - DOMAINNAME
   - CLOUDFLARE_EMAIL
+  - CLOUDFLARE_ZONEID
 - Databases
   - MARIA_HOST
   - MARIA_PORT
 - Security
+  - MY_EMAIL
   - HTTP_USERNAME
+  - HTTP_GOOGLE_CLIENT_ID
+  - GOOGLE_CLIENT_SECRET
+  - OAUTH_SECRET
+  - CLOUDFLARE_API_TOKEN
 - Notifications
 - Ports
   - TRAEFIK_DASH_PORT
@@ -131,9 +146,6 @@ touch ~/docker/appdata/traefik2/traefik.log
 - Cloudflare Email
 - Cloudflare API Key
 - Clouflare API Token
-- Oauth Secret
-- Google Client Secret
-- Google Client ID
 - My Email
 - Plex Claim
 - Traefik Pilot Token

@@ -54,8 +54,8 @@ usermod -aG docker $USER
 mkdir $DOCKER_DIR
 setfacl -Rdm g:docker:rwx $DOCKER_DIR
 chmod -R 775 $DOCKER_DIR
-cp ./.env $DOCKER_DIR/.env
-cp ./docker-socket-traefik.yml $DOCKER_DIR/docker-compose.yml
+touch $DOCKER_DIR/.env
+touch $DOCKER_DIR/docker-compose.yml
 mkdir $SECRETS_DIR
 touch $SECRETS_DIR/httpassword
 mkdir -p $DOCKER_DIR/appdata/traefik2/acme
