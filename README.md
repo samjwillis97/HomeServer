@@ -66,11 +66,11 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Influx Database for Personal Projects
 - Deluge
   - Torrent Client
-- NZBGet
+- NZBGet :heavy_check_mark: Fix Downloads
   - Usenet Downloader
 - Jackett
   - Torrent Indexer
-- NZBHydra v2
+- NZBHydra v2 :heavy_check_mark: Fix Downloads
   - Usenet MetaSearch
 - Radarr
   - Movie Manager
@@ -92,7 +92,7 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Docker Garbage Collector
 - CertDumper
   - Extract LetsEncrypt Certificates
-- CF companion
+- CF companion :heavy_check_mark:
   - Automatic CNAME DNS Creation on Cloudflare
 
 ## Environment Variables
@@ -125,6 +125,7 @@ touch ~/docker/appdata/traefik2/traefik.log
   - GOOGLE_CLIENT_SECRET
   - OAUTH_SECRET
   - CLOUDFLARE_API_TOKEN
+    - Use Zone DNS Template
 - Notifications
 - Ports
   - TRAEFIK_DASH_PORT
