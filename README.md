@@ -66,7 +66,7 @@ touch ~/docker/appdata/traefik2/traefik.log
   - MariaDB Web Interface
 - InfluxDB v2
   - Influx Database for Personal Projects
-- Deluge
+- Transmission :heavy_check_mark:
   - Torrent Client
 - NZBGet :heavy_check_mark:
   - Usenet Downloader
@@ -76,7 +76,7 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Usenet MetaSearch
 - Radarr :heavy_check_mark:
   - Movie Manager
-- Sonarr
+- Sonarr :heavy_check_mark:
   - TV Show Manager
 - Ombi
   - Media Requests
@@ -84,13 +84,13 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Plex Requests
 - Bazarr
   - Subtitle Management
-- Plex
-  - Media
+- Plex :heavy_check_mark:
+  - Media Server
 - Grafana
   - Dashboard
 - qDirStat
   - Directory Statistics
-- DockerGC
+- DockerGC :heavy_check_mark:
   - Docker Garbage Collector
 - CertDumper
   - Extract LetsEncrypt Certificates
@@ -130,7 +130,10 @@ touch ~/docker/appdata/traefik2/traefik.log
   - CLOUDFLARE_API_TOKEN
     - Use Zone DNS Template
   - RADARR_API_KEY
+  - SONARR_API_KEY
 - Notifications
+- Ports
+  - PLEX_PORT
 
 ## Secrets
 
