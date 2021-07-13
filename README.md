@@ -72,7 +72,7 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Torrent Indexer
 - NZBHydra v2 :heavy_check_mark: Fix Downloads
   - Usenet MetaSearch
-- Radarr
+- Radarr :heavy_check_mark:
   - Movie Manager
 - Sonarr
   - TV Show Manager
@@ -127,6 +127,7 @@ touch ~/docker/appdata/traefik2/traefik.log
   - OAUTH_SECRET
   - CLOUDFLARE_API_TOKEN
     - Use Zone DNS Template
+  - RADARR_API_KEY
 - Notifications
 
 ## Secrets
