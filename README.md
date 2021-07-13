@@ -68,11 +68,11 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Influx Database for Personal Projects
 - Deluge
   - Torrent Client
-- NZBGet :heavy_check_mark: Fix Downloads
+- NZBGet :heavy_check_mark:
   - Usenet Downloader
 - Jackett :heavy_check_mark:
   - Torrent Indexer
-- NZBHydra v2 :heavy_check_mark: Fix Downloads
+- NZBHydra v2 :heavy_check_mark:
   - Usenet MetaSearch
 - Radarr :heavy_check_mark:
   - Movie Manager
