@@ -1,19 +1,21 @@
 # HomeServer
 Ubuntu Homeserver Setup files and guide
 
-See: 
+See below for more useful information:
 
 - https://www.smarthomebeginner.com/google-oauth-with-traefik-2-docker/
 - https://www.smarthomebeginner.com/traefik-2-docker-tutorial/#Traefik_2_Setup
+- https://linuxize.com/post/how-to-mount-an-nfs-share-in-linux/
 
 ## Initial Setup Guide
 
 1. Create .env File
 2. Run CreateServer.sh as sudo
-3. Create Docker-Compose with only networks and socket-proxy, ensure working
-4. Add Traefik with Line un-commented for testing, ensure working
-5. Remove old acme.json create new one with 600 perms, re-comment line
-6. Add cf-ddns and cf-companion
+3. Forward Ports 80 and 443 on Modem to the Servers LAN IP
+4. Create Docker-Compose with only networks and socket-proxy, ensure working
+5. Add Traefik with Line un-commented for testing, ensure working
+6. Remove old acme.json create new one with 600 perms, re-comment line
+7. Add cf-ddns and cf-companion
 
 ```shell
 # Setup Server
@@ -39,7 +41,7 @@ touch ~/docker/docker-compose.yml
 mkdir ~/docker/secrets
 # Set up for Traefik 2
 touch ~/docker/secrets/httpassword
-echo $(htpasswd -nb username mystrongpassword) | sed -e s/\\$/\\$\\$/g
+# Use HTTP Password Generator (htpasswd file) and fill ^
 mkdir ~/docker/appdata
 mkdir ~/docker/appdata/traefik2
 mkdir ~/docker/appdata/traefik2/acme

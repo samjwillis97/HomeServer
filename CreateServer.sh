@@ -51,6 +51,7 @@ chmod +x /usr/local/bin/docker-compose
 echo -e "${CYAN}Setting up Directories${NC}"
 
 usermod -aG docker $USER
+
 mkdir $DOCKER_DIR
 setfacl -Rdm g:docker:rwx $DOCKER_DIR
 chmod -R 775 $DOCKER_DIR
