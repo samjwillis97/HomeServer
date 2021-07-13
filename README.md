@@ -13,7 +13,7 @@ See:
 3. Create Docker-Compose with only networks and socket-proxy, ensure working
 4. Add Traefik with Line un-commented for testing, ensure working
 5. Remove old acme.json create new one with 600 perms, re-comment line
-6. Add cloudflare 
+6. Add cf-ddns and cf-companion
 
 ```shell
 # Setup Server
@@ -68,7 +68,7 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Torrent Client
 - NZBGet :heavy_check_mark: Fix Downloads
   - Usenet Downloader
-- Jackett
+- Jackett :heavy_check_mark:
   - Torrent Indexer
 - NZBHydra v2 :heavy_check_mark: Fix Downloads
   - Usenet MetaSearch
@@ -94,7 +94,7 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Extract LetsEncrypt Certificates
 - CF companion :heavy_check_mark:
   - Automatic CNAME DNS Creation on Cloudflare
-- CF DDNS
+- CF DDNS :heavy_check_mark:
 
 ## Environment Variables
 
@@ -128,19 +128,6 @@ touch ~/docker/appdata/traefik2/traefik.log
   - CLOUDFLARE_API_TOKEN
     - Use Zone DNS Template
 - Notifications
-- Ports
-  - TRAEFIK_DASH_PORT
-  - PORTAINER_PORT
-  - DELUGE_PORT
-  - JACKETT_PORT
-  - RADARR_PORT
-  - SONARR_PORT
-  - PLEX_PORT
-  - PLEX_WEB_TOOLS_PORT
-  - OMBI_PORT
-  - TAUTULLI_PORT
-  - GRAFANA_PORT
-  - INFLUX_PORT
 
 ## Secrets
 
