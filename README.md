@@ -81,15 +81,13 @@ touch ~/docker/appdata/traefik2/traefik.log
 - Ombi
   - Media Requests
 - Tautulli
-  - Plex Requests
+  - Plex Statistics
 - Bazarr
   - Subtitle Management
 - Plex :heavy_check_mark:
   - Media Server
 - Grafana
-  - Dashboard
-- qDirStat
-  - Directory Statistics
+  - Dashboard Software
 - DockerGC :heavy_check_mark:
   - Docker Garbage Collector
 - CertDumper
