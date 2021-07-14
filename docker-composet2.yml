@@ -61,8 +61,6 @@ secrets:
     file: $SECRETS_DIR/google_client_id
   my_email:
     file: $SECRETS_DIR/my_email
-  plex_claim:
-    file: $SECRETS_DIR/plex_claim
   traefik_pilot_token:
     file: $SECRETS_DIR/traefik_pilot_token
   mariadb_root_password:
@@ -371,7 +369,7 @@ nzbget:
     - "traefik.http.routers.nzbget-rtr.entrypoints=https"
     - "traefik.http.routers.nzbget-rtr.rule=Host(`nzbget.$DOMAINNAME`)"
     ## Middlewares
-    - "traefik.http.routers.nzbget-rtr.middlewares=chain-oauth@file"
+    - "traefik.http.routers.nzbget-rtr.middlewares=chain-no-auth@file"
     ## HTTP Services
     - "traefik.http.routers.nzbget-rtr.service=nzbget-svc"
     - "traefik.http.services.nzbget-svc.loadbalancer.server.port=6789"
@@ -392,6 +390,8 @@ transmission:
     PUID: $PUID
     PGID: $PGID
     TZ: $TZ
+    USER: $TRANSMISSION_USER
+    PASS: $TRANSMISSION_PASS
     TRANSMISSION_WEB_HOME: /combustion-release/
   ports:
     - 9091:9091
@@ -403,39 +403,10 @@ transmission:
     traefik.http.routers.transmission-rtr.entrypoints: https
     traefik.http.routers.transmission-rtr.rule: Host(`transmission.${DOMAINNAME}`)
     ## Middlewares
-    traefik.http.routers.transmission-rtr.middlewares: chain-oauth@file
+    traefik.http.routers.transmission-rtr.middlewares: middlewares-rate-limit@file
     ## HTTP Services
     traefik.http.routers.transmission-rtr.service: transmission-svc
     traefik.http.services.transmission-svc.loadbalancer.server.port: 9091
-
-# Deluge Torrent Downloader
-  deluge:
-    image: linuxserver/deluge
-    container_name: deluge
-    networks:
-      - t2_proxy
-    ports:
-      - ${DELUGE_PORT}:${DELUGE_PORT}
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - UMASK_SET=002
-    volumes:
-      - ${USERDIR}/docker/deluge:/config
-      - ${DOWNLOAD_DIR}:/downloads
-    restart: unless-stopped
-    labels:
-      traefik.enable: true
-      ## HTTP Routers
-      traefik.http.routers.deluge-rtr.entrypoints: https
-      traefik.http.routers.deluge-rtr.rule: Host(`deluge.${DOMAINNAME}`)
-      traefik.http.routers.deluge-rtr.tls: true
-      ## Middlewares
-      traefik.http.routers.deluge-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
-      ## HTTP Services
-      traefik.http.routers.deluge-rtr.service: deluge-svc
-      traefik.http.services.deluge-svc.loadbalancer.server.port: ${DELUGE_PORT}
 
 ############################# INDEXERS
 
@@ -576,7 +547,7 @@ transmission:
 
   # Plex - Media Server
   plexms:
-    image: plexinc/pms-docker:plexpass
+    image: plexinc/pms-docker:latest
     container_name: plexms
     restart: "unless-stopped"
     networks:
@@ -603,14 +574,12 @@ transmission:
     environment:
       TZ: $TZ
       HOSTNAME: "ubuntuserver"
-      PLEX_CLAIM_FILE: /run/secrets/plex_claim
+      PLEX_CLAIM: $PLEX_CLAIM
       PLEX_UID: $PUID
       PLEX_GID: $PGID
       #VIRTUAL_HOST: proxplex.$DOMAINNAME
       #VIRTUAL_PORT: 443
       #VIRTUAL_NETWORK: t2_proxy
-    secrets:
-      - plex_claim
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
@@ -625,60 +594,52 @@ transmission:
 
 # Ombi - Media Requests
   ombi:
-    image: linuxserver/ombi
+    image: linuxserver/ombi:latest
     container_name: ombi
-    hostname: ombi
     restart: unless-stopped
     networks:
       - t2_proxy
-    ports:
-      - ${OMBI_PORT}:${OMBI_PORT}
     volumes:
-      - ${USERDIR}/docker/ombi:/config
+      - $DOCKER_DIR/appdata/ombi:/config
     environment:
-      PUID: ${PUID}
-      PGID: ${PGID}
-      TZ: ${TZ}
+      PUID: $PUID
+      PGID: $PGID
+      TZ: $TZ
     labels:
       traefik.enable: true
       ## HTTP Routers
       traefik.http.routers.ombi-rtr.entrypoints: https
       traefik.http.routers.ombi-rtr.rule: Host(`ombi.${DOMAINNAME}`)
-      traefik.http.routers.ombi-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.ombi-rtr.middlewares: chain-no-auth@file # Google OAuth 2.0
+      traefik.http.routers.ombi-rtr.middlewares: chain-no-auth@file
       ## HTTP Services
       traefik.http.routers.ombi-rtr.service: ombi-svc
-      traefik.http.services.ombi-svc.loadbalancer.server.port: ${OMBI_PORT}
+      traefik.http.services.ombi-svc.loadbalancer.server.port: 3579
 
 # Tautulli - Previously PlexPy. Plex statistics and monitoring
   tautulli:
-    image: linuxserver/tautulli
+    image: linuxserver/tautulli:latest
     container_name: tautulli
-    hostname: tautulli
     restart: unless-stopped
     networks:
       - t2_proxy
-    ports:
-      - "${TAUTULLI_PORT}:${TAUTULLI_PORT}"
     volumes:
-      - ${USERDIR}/docker/tautulli/config:/config
-      - ${USERDIR}/docker/tautulli/logs:/logs:ro
+      - $DOCKER_DIR/appdata/tautulli/config:/config
+      - $DOCKER_DIR/appdata/plexms/Library/Application Support/Plex Media Server/Logs:/logs:ro
     environment:
-      PUID: ${PUID}
-      PGID: ${PGID}
-      TZ: ${TZ}
+      PUID: $PUID
+      PGID: $PGID
+      TZ: $TZ
     labels:
       traefik.enable: true
       ## HTTP Routers
       traefik.http.routers.tautulli-rtr.entrypoints: https
       traefik.http.routers.tautulli-rtr.rule: Host(`tautulli.${DOMAINNAME}`)
-      traefik.http.routers.tautulli-rtr.tls: true
       ## Middlewares
-      traefik.http.routers.tautulli-rtr.middlewares: chain-no-auth@file # Google OAuth 2.0
+      traefik.http.routers.tautulli-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
       traefik.http.routers.tautulli-rtr.service: tautulli-svc
-      traefik.http.services.tautulli-svc.loadbalancer.server.port: ${TAUTULLI_PORT}
+      traefik.http.services.tautulli-svc.loadbalancer.server.port: 8181
 
 ############################# MEDIA FILE MANAGEMENT
 

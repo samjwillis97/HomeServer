@@ -78,9 +78,9 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Movie Manager
 - Sonarr :heavy_check_mark:
   - TV Show Manager
-- Ombi
+- Ombi :heavy_check_mark:
   - Media Requests
-- Tautulli
+- Tautulli :heavy_check_mark:
   - Plex Statistics
 - Bazarr
   - Subtitle Management
@@ -129,6 +129,9 @@ touch ~/docker/appdata/traefik2/traefik.log
     - Use Zone DNS Template
   - RADARR_API_KEY
   - SONARR_API_KEY
+  - PLEX_CLAIM
+  - TRANSMISSION_USER
+  - TRANSMISSION_PASS
 - Notifications
 - Ports
   - PLEX_PORT
@@ -140,7 +143,6 @@ touch ~/docker/appdata/traefik2/traefik.log
 - Cloudflare API Key
 - Clouflare API Token
 - My Email
-- Plex Claim
 - Traefik Pilot Token
 - MariaDB Root Password
 - InfluxDB Root Password
