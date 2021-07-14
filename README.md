@@ -60,10 +60,6 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Google Two Factor Auth
 - Portainer :heavy_check_mark:
   - Container Management WebUI
-- MariaDB
-  - MySQL Database
-- PHPMyAdmin
-  - MariaDB Web Interface
 - InfluxDB v2
   - Influx Database for Personal Projects
 - Transmission :heavy_check_mark:
@@ -82,12 +78,16 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Media Requests
 - Tautulli :heavy_check_mark:
   - Plex Statistics
-- Bazarr
+- Bazarr :heavy_check_mark:
   - Subtitle Management
 - Plex :heavy_check_mark:
   - Media Server
 - Grafana
   - Dashboard Software
+- Varken
+  - Plex/Influx/Grafana aggregator
+- Code Server
+  - Remote VS Code
 - DockerGC :heavy_check_mark:
   - Docker Garbage Collector
 - CertDumper
@@ -129,6 +129,7 @@ touch ~/docker/appdata/traefik2/traefik.log
     - Use Zone DNS Template
   - RADARR_API_KEY
   - SONARR_API_KEY
+  - BAZARR_API_KEY
   - PLEX_CLAIM
   - TRANSMISSION_USER
   - TRANSMISSION_PASS
