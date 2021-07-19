@@ -675,6 +675,63 @@ transmission:
 
 
 ############################# UTILITIES
+
+# Guacamole
+## Get Guac Script
+# docker run --rm guacamole/guacamole /opt/guacamole/bin/initdb.sh --mysql > guac_initdb.sql
+## Copy to Maridb folder script above
+## Login to MySQL 
+# mysql -u root -p
+## Create needed for Guacamole
+# create database guacamole;
+# CREATE USER 'guacdb_user' IDENTIFIED BY '<PASSWORD>';
+# GRANT ALL ON 'guacamole%'.* TO 'guacdb_user';
+# flush privilleges;
+# quit
+# cat /config/guac_initdb.sql | mysql -u guacdb_user -p guacamole;
+## login with root and check there are 23 tables
+# mysql -u root -p
+# use guacamole;
+# show tables;
+## Setup GuacD first
+  # Guacamole Daemon - Needed for Guacamole
+  guacd:
+    image: guacamole/guacd
+    container_name: guacd
+    restart: unless-stopped
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+
+ guacamole:
+    image: guacamole/guacamole:latest
+    container_name: guacamole
+    restart: unless-stopped
+    networks:
+      - t2_proxy
+      - default
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      GUACD_HOSTNAME: guacd
+      MYSQL_HOSTNAME: mariadb
+      MYSQL_PORT: $MARIADB_PORT
+      MYSQL_DATABASE: $GUACDB
+      MYSQL_USER: $GUACDB_USER
+      MYSQL_PASSWORD: $GUACDB_PASS
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.guacamole-rtr.entrypoints=https"
+      - "traefik.http.routers.guacamole-rtr.rule=Host(`guac.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.guacamole-rtr.middlewares=chain-oauth@file,add-guacamole"
+      - "traefik.http.middlewares.add-guacamole.addPrefix.prefix=/guacamole"
+      ## HTTP Services
+      - "traefik.http.routers.guacamole-rtr.service=guacamole-svc"
+      - "traefik.http.services.guacamole-svc.loadbalancer.server.port=8080"
+
   codeserver:
     image: codercom/code-server:latest
     container_name: codeserver

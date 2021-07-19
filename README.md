@@ -60,8 +60,8 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Google Two Factor Auth
 - Portainer :heavy_check_mark:
   - Container Management WebUI
-- InfluxDB v1
-  - Influx Database for Varken
+- MariDB :heavy_check_mark:
+  - MySQL Database
 - Transmission :heavy_check_mark:
   - Torrent Client
 - NZBGet :heavy_check_mark:
@@ -84,10 +84,14 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Media Server
 - Grafana
   - Dashboard Software
+- InfluxDB v1
+  - Influx Database for Varken
 - Varken
   - Plex/Influx/Grafana aggregator
 - Code Server :heavy_check_mark:
   - Remote VS Code
+- Guacamole :heavy_check_mark:
+  - Remote Access
 - DockerGC :heavy_check_mark:
   - Docker Garbage Collector
 - CertDumper
@@ -117,8 +121,10 @@ touch ~/docker/appdata/traefik2/traefik.log
   - CLOUDFLARE_EMAIL
   - CLOUDFLARE_ZONEID
 - Databases
-  - MARIADB_HOST
   - MARIADB_PORT
+  - GUACDB_USER
+  - GUACDB_PASS
+  - GUACDB
 - Security
   - MY_EMAIL
   - HTTP_USERNAME
