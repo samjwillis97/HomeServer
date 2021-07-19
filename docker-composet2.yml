@@ -1,28 +1,6 @@
 # https://www.smarthomebeginner.com/traefik-2-docker-tutorial/#Traefik_2_Setup
 # https://www.smarthomebeginner.com/google-oauth-with-traefik-2-docker/
 ########################### PRE
-# sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
-# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-# sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-# sudo apt-get update
-# sudo apt-get install docker-ce
-# sudo curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-# sudo chmod +x /usr/local/bin/docker-compose
-# sudo usermod -aG docker ${USER}
-# mkdir ~/docker
-# sudo nano ~/docker/.env
-# sudo chmod -R 775 ~/docker
-# mkdir ~/docker/shared
-# mkdir -p ~/docker/traefik2/acme
-# touch ~/docker/traefik2/acme/acme.json
-# chmod 600 ~/docker/traefik2/acme/acme.json
-# touch ~/docker/traefik2/traefik.log
-# nano ~/docker/traefik/traefik.toml
-# nano ~/docker/docker-compose.yml
-# docker network create t2_proxy
-# FORWARD PORTS 8 and 443 to Server
-# docker-compose -f ~/docker/docker-compose.yml up -d
-
 
 version: "3.7"
 
@@ -490,6 +468,7 @@ transmission:
 
 
 # Sonarr - TV Shows management
+# https://trash-guides.info/Sonarr/Sonarr-Release-Profile-RegEx/
   sonarr:
     image: linuxserver/sonarr
     container_name: sonarr
