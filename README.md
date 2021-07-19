@@ -151,7 +151,3 @@ touch ~/docker/appdata/traefik2/traefik.log
 - Cloudflare Email
 - Cloudflare API Key
 - Clouflare API Token
-- My Email
-- Traefik Pilot Token
-- MariaDB Root Password
-- InfluxDB Root Password
