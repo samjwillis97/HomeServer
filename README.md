@@ -96,7 +96,7 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Docker Garbage Collector
 - Dozzle :heavy_check_mark:
   - Docker log viewer
-- CertDumper
+- CertDumper :heavy_check_mark:
   - Extract LetsEncrypt Certificates
 - CF companion :heavy_check_mark:
   - Automatic CNAME DNS Creation on Cloudflare
