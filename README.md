@@ -60,8 +60,8 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Google Two Factor Auth
 - Portainer :heavy_check_mark:
   - Container Management WebUI
-- InfluxDB v2
-  - Influx Database for Personal Projects
+- InfluxDB v1
+  - Influx Database for Varken
 - Transmission :heavy_check_mark:
   - Torrent Client
 - NZBGet :heavy_check_mark:
@@ -86,7 +86,7 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Dashboard Software
 - Varken
   - Plex/Influx/Grafana aggregator
-- Code Server
+- Code Server :heavy_check_mark:
   - Remote VS Code
 - DockerGC :heavy_check_mark:
   - Docker Garbage Collector
@@ -133,6 +133,7 @@ touch ~/docker/appdata/traefik2/traefik.log
   - PLEX_CLAIM
   - TRANSMISSION_USER
   - TRANSMISSION_PASS
+  - CODESERVER_PASS
 - Notifications
 - Ports
   - PLEX_PORT
