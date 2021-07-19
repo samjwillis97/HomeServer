@@ -94,6 +94,8 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Remote Access
 - DockerGC :heavy_check_mark:
   - Docker Garbage Collector
+- Dozzle :heavy_check_mark:
+  - Docker log viewer
 - CertDumper
   - Extract LetsEncrypt Certificates
 - CF companion :heavy_check_mark:
