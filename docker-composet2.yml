@@ -292,30 +292,26 @@ traefik:
       traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
       ## HTTP Services
       traefik.http.routers.portainer-rtr.service: portainer-svc
-      traefik.http.services.portainer-svc.loadbalancer.server.port: $PORTAINER_PORT
+      traefik.http.services.portainer-svc.loadbalancer.server.port: 9000
 
 ############################# DATABASE
 
 # MariaDB - MySQL Database
+# After starting container for first time dexec and mysqladmin -u root password <password>
   mariadb:
     container_name:  mariadb
     image: linuxserver/mariadb:latest
     restart: always
-    networks:
-      - t2_proxy
     security_opt:
       - no-new-privileges:true
     ports:
-      - ${DB_PORT}:${DB_PORT}
+      - $MARIADB_PORT:3306
     volumes:
-      - ${USERDIR}/docker/mariadb/data:/config
-      - ${USERDIR}/docker/shared:/shared
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
+      - $DOCKER_DIR/appdata/mariadb/data:/config
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - PUID=$PUID
+      - PGID=$PGID
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
 
 # phpMyAdmin - Database management
 # Create a new user with admin privileges. Cannot login as root.

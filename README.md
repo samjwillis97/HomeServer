@@ -117,8 +117,8 @@ touch ~/docker/appdata/traefik2/traefik.log
   - CLOUDFLARE_EMAIL
   - CLOUDFLARE_ZONEID
 - Databases
-  - MARIA_HOST
-  - MARIA_PORT
+  - MARIADB_HOST
+  - MARIADB_PORT
 - Security
   - MY_EMAIL
   - HTTP_USERNAME
@@ -134,6 +134,7 @@ touch ~/docker/appdata/traefik2/traefik.log
   - TRANSMISSION_USER
   - TRANSMISSION_PASS
   - CODESERVER_PASS
+  - MYSQL_ROOT_PASSWORD
 - Notifications
 - Ports
   - PLEX_PORT
