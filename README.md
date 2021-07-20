@@ -60,6 +60,8 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Google Two Factor Auth
 - Portainer :heavy_check_mark:
   - Container Management WebUI
+- Heimdall :heavy_check_mark:
+  - Dashboard for Links
 - MariDB :heavy_check_mark:
   - MySQL Database
 - Transmission :heavy_check_mark:
