@@ -276,6 +276,20 @@ traefik:
       - PUID=$PUID
       - PGID=$PGID
       - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    entrypoint: redis-server --appendonly yes --requirepass $REDIS_PASSWORD --maxmemory 512mb --maxmemory-policy allkeys-lru
+    ports:
+        - "$REDIS_PORT:6379"
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - $DOCKER_DIR/appdata/redis/data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
 
 # phpMyAdmin - Database management
 # Create a new user with admin privileges. Cannot login as root.
@@ -748,34 +762,6 @@ transmission:
 
 ############################# TESTING 
 
-  # grafana:
-  #   image: grafana/grafana
-  #   container_name: grafana
-  #   hostname: grafana
-  #   restart: unless-stopped
-  #   networks:
-  #     - default
-  #     - t2_proxy
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - ${USERDIR}/docker/grafana/data:/var/lib/grafana
-  #     - ${USERDIR}/docker/grafana/config:/etc/grafana
-  #   environment:
-  #     TZ: ${TZ}
-  #     PUID: ${PUID}
-  #     PGID: ${PGID}
-  #   labels:
-  #     traefik.enable: true
-  #     ## HTTP Routers
-  #     traefik.http.routers.grafana-rtr.entrypoints: https
-  #     traefik.http.routers.grafana-rtr.rule: Host(`grafana.${DOMAINNAME}`)
-  #     traefik.http.routers.grafana-rtr.tls: true
-  #     ## Middlewares
-  #     traefik.http.routers.grafana-rtr.middlewares: chain-oauth@file # Google OAuth 2.0
-  #     ## HTTP Services
-  #     traefik.http.routers.grafana-rtr.service: grafana-svc
-  #     traefik.http.services.grafana-svc.loadbalancer.server.port: 3000
 
 ############################# MAINTENANC
   uptime:
