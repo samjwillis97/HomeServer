@@ -60,6 +60,8 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Google Two Factor Auth
 - Portainer :heavy_check_mark:
   - Container Management WebUI
+- Heimdall :heavy_check_mark:
+  - Dashboard for Links
 - MariDB :heavy_check_mark:
   - MySQL Database
 - Transmission :heavy_check_mark:
@@ -94,6 +96,8 @@ touch ~/docker/appdata/traefik2/traefik.log
   - Remote Access
 - DockerGC :heavy_check_mark:
   - Docker Garbage Collector
+- Uptime :heavy_check_mark:
+  - Uptime monitoring 
 - Dozzle :heavy_check_mark:
   - Docker log viewer
 - CertDumper :heavy_check_mark:
