@@ -367,7 +367,7 @@ transmission:
     - no-new-privileges:true
   volumes:
     - $DOCKER_DIR/appdata/transmission:/config
-    - $DOWNLOAD_DIR:/downloads
+    - $DOWNLOAD_DIR:/data/downloads
   environment:
     PUID: $PUID
     PGID: $PGID
@@ -403,7 +403,7 @@ transmission:
       - no-new-privileges:true
     volumes:
       - $DOCKER_DIR/appdata/jackett:/config
-      - $DOWNLOAD_DIR:/downloads
+      - $DOWNLOAD_DIR:/data/downloads
       - "/etc/localtime:/etc/localtime:ro"
     environment:
       PUID: $PUID
@@ -843,8 +843,7 @@ transmission:
     environment:
       DOMAIN: $DOMAINNAME
 
-# Add, Oznu/Cloudflare-DDNS
-# Add, tiredofit/traefik-cloudflare-companion
+
   cf-ddns:
     container_name: cf-ddns
     image: oznu/cloudflare-ddns
